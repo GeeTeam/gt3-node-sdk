@@ -1,20 +1,20 @@
-**注意：3.x.x之后修改了所传入的字段名称，将 `publicKey` 和 `privateKey` 修改为 `geetest_id` 和 `geetest_key` ，升级会造成不兼容问题，请各位注意在升级前修改相应的字段名称，新用户无须关注此修改**
+** 此处为极验 3.0 验证码的 Node SDK，如需要极验 2.0 验证码的SDK**
 
 # Install 安装
 
 ```
-npm install geetest --save
+npm install geetest3 --save
 ```
 
 # 运行DEMO
 
 ```shell
 cd Project
-git clone https://github.com/GeeTeam/gt-node-sdk.git
-cd gt-node-sdk
+git clone https://github.com/GeeTeam/gt3-node-sdk.git
+cd gt3-node-sdk
 npm install
 npm start
-// 最后请打开浏览器访问localhost:8080
+// 最后请打开浏览器访问localhost:9977
 // 了解sdk的使用方式请查阅demo目录下的app.js文件
 ```
 
@@ -39,7 +39,9 @@ var Geetest = require('geetest');
 var captcha = new Geetest({
     geetest_id: 'xxx', // 将xxx替换为您申请的 id
     geetest_key: 'xxx', // 将xxx替换为您申请的 key
+    offline: false, // offline的设置需要根据sdk检查到的检验极验服务器状态来设置
     new_captcha: true // 申请的 id 和 key 为新验证
+    // 其他参数
 });
 ```
 
@@ -135,8 +137,6 @@ captcha.validate({
     console.error(err);
 })
 ```
-
-### 使用前，强烈建议您阅读我们的[入门文档](http://www.geetest.com/install/sections/idx-main-frame.html)
 
 ### 更新历史：[CHANGELOG](CHANGELOG.md)
 

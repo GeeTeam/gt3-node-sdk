@@ -27,7 +27,7 @@ function Geetest(config) {
         this.API_SERVER = config.api_server;
     }
 
-    this.new_captcha = config.new_captcha ? true : false;
+    this.new_captcha = true;
     this.geetest_id = config.geetest_id;
     this.geetest_key = config.geetest_key;
     this.isFailback = false;
