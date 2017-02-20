@@ -39,8 +39,7 @@ var Geetest = require('gt3-sdk');
 var captcha = new Geetest({
     geetest_id: 'xxx', // 将xxx替换为您申请的 id
     geetest_key: 'xxx', // 将xxx替换为您申请的 key
-    offline: false, // offline的设置需要根据sdk检查到的检验极验服务器状态来设置
-    new_captcha: true // 申请的 id 和 key 为新验证
+    offline: false // offline的设置需要根据sdk检查到的检验极验服务器状态来设置
     // 其他参数
 });
 ```
@@ -75,13 +74,8 @@ captcha.register().then(function (data) {
     
     // data 为一个对象，包含 gt, challenge, success, new_captcha 字段
     // success 为 1 表示正常模式，为 0 表示宕机模式（failback, fallback）
-    var body = {
-        gt: data.geetest_id,
-        challenge: data.challenge,
-        success: data.success
-    };
         
-    // 将 body 发送给前端...
+    // 将 data 发送给前端...
     
 }, function (err) {
     console.error(err);
