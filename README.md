@@ -60,13 +60,8 @@ captcha.register(function (err, data) {
     
     // data 为一个对象，包含 gt, challenge, success, new_captcha 字段
     // success 为 1 表示正常模式，为 0 表示宕机模式（failback, fallback）
-    var body = {
-        gt: data.geetest_id,
-        challenge: data.challenge,
-        success: data.success
-    };
     
-    // 将 body 发送给前端...
+    // 将 data 发送给前端...
 });
 
 // Promise 形式
