@@ -1,7 +1,7 @@
 {
-  "name": "geetest",
+  "name": "gt3-sdk",
   "version": "1.0.0",
-  "description": "Node SDK for Geetest captcha",
+  "description": "Node SDK for Geetest 3.0 captcha",
   "main": "gt-sdk.js",
   "keywords": [
     "Geetest",
@@ -27,7 +27,7 @@
     "express": "^4.13.3",
     "body-parser": "^1.14.1"
   },
-  "repository": "https://github.com/GeeTeam/gt-node-sdk",
+  "repository": "https://github.com/GeeTeam/gt3-node-sdk",
   "scripts": {
     "start": "node demo/app.js"
   }

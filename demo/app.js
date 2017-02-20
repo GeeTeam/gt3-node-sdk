@@ -13,14 +13,14 @@ app.get("/", function (req, res) {
 
 // pc 端接口
 
-var pcGeetest = new Geetest({
-    geetest_id: 'b46d1900d0a894591916ea94ea91bd2c',
-    geetest_key: '36fc3fe98530eea08dfc6ce76e3d24c4'
+var captcha = new Geetest({
+    geetest_id: '48a6ebac4ebc6642d68c217fca33eb4d',
+    geetest_key: '4f1c085290bec5afdc54df73535fc361'
 });
 app.get("/pc-geetest/register", function (req, res) {
 
     // 向极验申请每次验证所需的challenge
-    pcGeetest.register(function (err, data) {
+    captcha.register(function (err, data) {
         if (err) {
             console.error(err);
             return;
@@ -47,7 +47,7 @@ app.get("/pc-geetest/register", function (req, res) {
 app.post("/pc-geetest/validate", function (req, res) {
 
     // 对ajax提供的验证凭证进行二次验证
-    pcGeetest.validate({
+    captcha.validate({
         challenge: req.body.geetest_challenge,
         validate: req.body.geetest_validate,
         seccode: req.body.geetest_seccode
@@ -78,7 +78,7 @@ app.post("/pc-geetest/validate", function (req, res) {
 app.post("/pc-geetest/form-validate", function (req, res) {
 
     // 对form表单提供的验证凭证进行验证
-    pcGeetest.validate({
+    captcha.validate({
 
         challenge: req.body.geetest_challenge,
         validate: req.body.geetest_validate,
