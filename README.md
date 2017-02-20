@@ -3,7 +3,7 @@
 # Install 安装
 
 ```
-npm install geetest3 --save
+npm install gt3-sdk --save
 ```
 
 # 运行DEMO
@@ -34,7 +34,7 @@ sdk 提供 `Geetest` 构造函数，实例化时需要传入一个配置对象�
 申请后，初始化 `Geetest`：
 
 ```js
-var Geetest = require('geetest');
+var Geetest = require('gt3-sdk');
 
 var captcha = new Geetest({
     geetest_id: 'xxx', // 将xxx替换为您申请的 id
