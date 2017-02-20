@@ -1,6 +1,6 @@
 {
   "name": "gt3-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node SDK for Geetest 3.0 captcha",
   "main": "gt-sdk.js",
   "keywords": [

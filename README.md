@@ -1,4 +1,4 @@
-** 此处为极验 3.0 验证码的 Node SDK，如需要极验 2.0 验证码的SDK**
+** 此处为极验 3.0 验证码的 Node SDK，如需要极验 2.0 验证码的SDK，请到 [gt-node-sdk](https://github.com/GeeTeam/gt-node-sdk)**
 
 # Install 安装
 
