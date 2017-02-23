@@ -38,10 +38,7 @@ var Geetest = require('gt3-sdk');
 
 var captcha = new Geetest({
     geetest_id: 'xxx', // 将xxx替换为您申请的 id
-    geetest_key: 'xxx', // 将xxx替换为您申请的 key
-    offline: false, // offline的设置需要根据sdk检查到的检验极验服务器状态来设置
-    new_captcha: true // 申请的 id 和 key 为新验证
-    // 其他参数
+    geetest_key: 'xxx' // 将xxx替换为您申请的 key
 });
 ```
 
@@ -52,37 +49,44 @@ var captcha = new Geetest({
 ```js
 // 回调形式
 captcha.register(function (err, data) {
-    
-    // err 表示发生错误
-    if (err) {
-        console.error(err);
-        return;
-    }
-    
-    // data 为一个对象，包含 gt, challenge, success, new_captcha 字段
-    // success 为 1 表示正常模式，为 0 表示宕机模式（failback, fallback）
-    var body = {
-        gt: data.geetest_id,
-        challenge: data.challenge,
-        success: data.success
-    };
-    
-    // 将 body 发送给前端...
-});
+        if (err) {
+            console.error(err);
+            return;
+        }
+        if (!data.success) {
+            // 进入 failback，如果一直进入此模式，请检查服务器到极验服务器是否可访问
+            // 可以通过修改 hosts 把极验服务器 api.geetest.com 指到不可访问的地址
+
+            // 为以防万一，你可以选择以下两种方式之一：
+
+            // 1. 继续使用极验提供的failback备用方案
+            // send(data);
+
+            // 2. 使用自己提供的备用方案
+            // todo
+        } else {
+            // 正常模式
+            // send(data);
+        }
+    });
 
 // Promise 形式
 captcha.register().then(function (data) {
+    if (!data.success) {
+        // 进入 failback，如果一直进入此模式，请检查服务器到极验服务器是否可访问
+        // 可以通过修改 hosts 把极验服务器 api.geetest.com 指到不可访问的地址
     
-    // data 为一个对象，包含 gt, challenge, success, new_captcha 字段
-    // success 为 1 表示正常模式，为 0 表示宕机模式（failback, fallback）
-    var body = {
-        gt: data.geetest_id,
-        challenge: data.challenge,
-        success: data.success
-    };
-        
-    // 将 body 发送给前端...
+        // 为以防万一，你可以选择以下两种方式之一：
     
+        // 1. 继续使用极验提供的failback备用方案
+        // send(data);
+    
+        // 2. 使用自己提供的备用方案
+        // todo
+    } else {
+        // 正常模式
+        // send(data);
+    }
 }, function (err) {
     console.error(err);
 });
@@ -93,43 +97,32 @@ captcha.register().then(function (data) {
 ```js
 // 回调形式
 captcha.validate({
-    challenge: 'xxx',
-    validate: 'xxx',
-    seccode: 'xxx'
+    geetest_challenge: 'xxx',
+    geetest_validate: 'xxx',
+    geetest_seccode: 'xxx'
 }, function (err, success) {
-
     if (err) {
-        console.error(err);
-        return;
+        // 网络错误
+        // send(err);
+    } else if (!success) {
+        // 二次验证失败
+        // send('fail');
+    } else {
+        // send('success');
     }
-    
-    if (success) {
-            
-            // 二次验证成功，运行用户的操作
-            
-        } else {
-            
-            // 二次验证失败，不允许用户的操作
-            
-        }
-    
 });
 
 // Promise 形式
 captcha.validate({
-    challenge: 'xxx',
-    validate: 'xxx',
-    seccode: 'xxx'
+    geetest_challenge: 'xxx',
+    geetest_validate: 'xxx',
+    geetest_seccode: 'xxx'
 }).then(function (success) {
-    
-    if (success) {
-        
-        // 二次验证成功，运行用户的操作
-        
+    if (!success) {
+        // 二次验证失败
+        // send('fail');
     } else {
-        
-        // 二次验证失败，不允许用户的操作
-        
+        // send('success');
     }
 }, function (err) {
     console.error(err);

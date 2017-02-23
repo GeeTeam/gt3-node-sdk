@@ -14,20 +14,23 @@ var randint = function (from, to) {
 };
 
 function Geetest(config) {
-    if (!config.geetest_id) {
+
+    if (typeof config.geetest_id !== 'string') {
         throw new Error('Geetest ID Required');
     }
-    if (!config.geetest_key) {
+    if (typeof config.geetest_key !== 'string') {
         throw new Error("Geetest KEY Required");
     }
-    if (config.protocol) {
+    if (typeof config.protocol === 'string') {
         this.PROTOCOL = config.protocol;
     }
-    if (config.api_server) {
+    if (typeof config.api_server === 'string') {
         this.API_SERVER = config.api_server;
     }
+    if (typeof config.timeout === 'number') {
+        this.TIMEOUT = config.timeout;
+    }
 
-    this.new_captcha = true;
     this.geetest_id = config.geetest_id;
     this.geetest_key = config.geetest_key;
     this.isFailback = false;
@@ -39,6 +42,66 @@ Geetest.prototype = {
     API_SERVER: 'api.geetest.com',
     VALIDATE_PATH: '/validate.php',
     REGISTER_PATH: '/register.php',
+    TIMEOUT: 2000,
+    NEW_CAPTCHA: true,
+    JSON_FORMAT: 1,
+
+    register: function (callback) {
+
+        var that = this;
+        return new Promise(function (resolve, reject) {
+            that._register(function (err, data) {
+                if (typeof callback === 'function') {
+                    callback(err, data);
+                }
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    },
+
+    _register: function (callback) {
+        var that = this;
+        request({
+            url: this.PROTOCOL + this.API_SERVER + this.REGISTER_PATH,
+            method: 'GET',
+            timeout: this.TIMEOUT,
+            json: true,
+            qs: {
+                gt: this.geetest_id,
+                json_format: this.JSON_FORMAT,
+                sdk: 'Node_' + pkg.version
+            }
+        }, function (err, res, data) {
+
+            if (err || !data || !data.challenge) {
+
+                // failback
+                that.isFailback = true;
+                that.challenge = that._make_challenge();
+                callback(null, {
+                    success: 0,
+                    challenge: that.challenge,
+                    gt: that.geetest_id,
+                    new_captcha: that.NEW_CAPTCHA
+                });
+
+            } else {
+
+                that.isFailback = false;
+                that.challenge = md5(data.challenge + that.geetest_key);
+                callback(null, {
+                    success: 1,
+                    challenge: that.challenge,
+                    gt: that.geetest_id,
+                    new_captcha: that.NEW_CAPTCHA
+                });
+            }
+        });
+    },
 
     validate: function (result, callback) {
         var that = this;
@@ -60,180 +123,43 @@ Geetest.prototype = {
 
     _validate: function (result, callback) {
 
-        var challenge = result.challenge;
-        var validate = result.validate;
+        var challenge = result.challenge || result.geetest_challenge;
+        var validate = result.validate || result.geetest_validate;
+        var seccode = result.seccode || result.geetest_seccode;
 
         if (this.isFailback) {
 
-            if (this.new_captcha) {
-
-                var test = this.challenge === result.challenge &&
-                    md5(this.challenge) === result.validate;
-
-                if (test) {
-
-                    callback(null, true);
-
-                } else {
-
-                    callback(null, false);
-
-                }
-
+            if (md5(challenge) === validate) {
+                callback(null, true);
             } else {
-
-                var validate_strs = validate.split('_');
-                var encode_ans = validate_strs[0];
-                var encode_fbii = validate_strs[1];
-                var encode_igi = validate_strs[2];
-
-                var decode_ans = this._decode_response(challenge, encode_ans);
-                var decode_fbii = this._decode_response(challenge, encode_fbii);
-                var decode_igi = this._decode_response(challenge, encode_igi);
-
-                var validate_result = this._validate_fail_image(decode_ans, decode_fbii, decode_igi);
-
-                if (validate_result === 1) {
-                    callback(null, true);
-                } else {
-                    callback(null, false);
-                }
+                callback(null, false);
             }
 
         } else {
 
-            var hash = this.geetest_key + 'geetest' + result.challenge;
-            if (result.validate === md5(hash)) {
-                var url = this.PROTOCOL + this.API_SERVER + this.VALIDATE_PATH;
-                request.post(url, {
+            var hash = this.geetest_key + 'geetest' + challenge;
+            if (validate === md5(hash)) {
+                request({
+                    url: this.PROTOCOL + this.API_SERVER + this.VALIDATE_PATH,
+                    method: 'POST',
+                    timeout: this.TIMEOUT,
+                    json: true,
                     form: {
-                        seccode: result.seccode
+                        gt: this.geetest_id,
+                        seccode: seccode,
+                        json_format: this.JSON_FORMAT
                     }
-                }, function (err, res, body) {
-                    if (err) {
+                }, function (err, res, data) {
+                    if (err || !data || !data.seccode) {
                         callback(err);
                     } else {
-                        callback(null, body === md5(result.seccode));
+                        callback(null, data.seccode === md5(seccode));
                     }
                 });
             } else {
                 callback(null, false);
             }
         }
-    },
-
-    _validate_fail_image: function (ans, full_bg_index, img_grp_index) {
-
-        var thread = 3;
-        var full_bg_name = md5(full_bg_index).slice(0, 10);
-        var bg_name = md5(img_grp_index).slice(10, 20);
-        var answer_decode = '';
-        var i;
-        for (i = 0; i < 9; i = i + 1) {
-            if (i % 2 == 0) {
-                answer_decode += full_bg_name[i];
-            } else {
-                answer_decode += bg_name[i];
-            }
-        }
-        var x_decode = answer_decode.slice(4);
-        var x_int = parseInt(x_decode, 16);
-        var result = x_int % 200;
-        if (result < 40) {
-            result = 40;
-        }
-        if (Math.abs(ans - result) < thread) {
-            return 1;
-        } else {
-            return 0;
-        }
-    },
-
-    _decode_response: function (challenge, userresponse) {
-        if (userresponse.length > 100) {
-            return 0;
-        }
-        var shuzi = [1, 2, 5, 10, 50];
-        var chongfu = [];
-        var key = {};
-        var count = 0, i, len;
-        for (i = 0, len = challenge.length; i < len; i = i + 1) {
-            var c = challenge[i];
-            if (chongfu.indexOf(c) === -1) {
-                chongfu.push(c);
-                key[c] = shuzi[count % 5];
-                count += 1;
-            }
-        }
-        var res = 0;
-        for (i = 0, len = userresponse.length; i < len; i = i + 1) {
-            res += key[userresponse[i]] || 0;
-        }
-        res = res - this._decode_rand_base(challenge);
-        return res;
-    },
-
-    _decode_rand_base: function (challenge) {
-        var str_base = challenge.slice(32);
-        var i, len, temp_array = [];
-        for (i = 0, len = str_base.length; i < len; i = i + 1) {
-            var temp_char = str_base[i];
-            var temp_ascii = temp_char.charCodeAt(0);
-            var result = temp_ascii > 57 ? temp_ascii - 87 : temp_ascii - 48;
-            temp_array.push(result);
-        }
-        var decode_res = temp_array[0] * 36 + temp_array[1];
-        return decode_res;
-    },
-
-    register: function (callback) {
-
-        var that = this;
-        return new Promise(function (resolve, reject) {
-            that._register(function (err, data) {
-                if (typeof callback === 'function') {
-                    callback(err, data);
-                }
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(data);
-                }
-            });
-        });
-    },
-
-    _register: function (callback) {
-        var url = this.PROTOCOL + this.API_SERVER + this.REGISTER_PATH
-            + '?gt=' + this.geetest_id + '&sdk=Node_' + pkg.version;
-
-        var that = this;
-        request.get(url, {timeout: 2000}, function (err, res, challenge) {
-
-            if (err || challenge.length !== 32) {
-
-                // fallback
-                that.isFailback = true;
-                that.challenge = that._make_challenge();
-                callback(null, {
-                    success: 0,
-                    challenge: that.challenge,
-                    gt: that.geetest_id,
-                    new_captcha: that.new_captcha
-                });
-
-            } else {
-
-                that.isFailback = false;
-                that.challenge = md5(challenge + that.geetest_key);
-                callback(null, {
-                    success: 1,
-                    challenge: that.challenge,
-                    gt: that.geetest_id,
-                    new_captcha: that.new_captcha
-                });
-            }
-        });
     },
 
     _make_challenge: function () {

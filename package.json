@@ -1,6 +1,6 @@
 {
   "name": "gt3-sdk",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Node SDK for Geetest 3.0 captcha",
   "main": "gt-sdk.js",
   "keywords": [
@@ -21,11 +21,11 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "request": "^2.54.0"
+    "request": "^2.79.1"
   },
   "devDependencies": {
-    "express": "^4.13.3",
-    "body-parser": "^1.14.1"
+    "express": "^4.14.1",
+    "body-parser": "^1.16.1"
   },
   "repository": "https://github.com/GeeTeam/gt3-node-sdk",
   "scripts": {
