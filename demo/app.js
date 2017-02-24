@@ -107,7 +107,6 @@ app.get("/gt/register2", function (req, res) {
 
 app.post("/gt/ajax-validate2", function (req, res) {
 
-    console.log(req.body.geetest_challenge);
     // 对ajax提供的验证凭证进行二次验证
     captcha2.validate({
 
