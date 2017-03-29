@@ -26,10 +26,13 @@
   "devDependencies": {
     "body-parser": "^1.16.1",
     "express": "^4.14.1",
+    "forever": "^0.15.3",
     "supervisor": "^0.12.0"
   },
   "repository": "https://github.com/GeeTeam/gt3-node-sdk",
   "scripts": {
+    "start-server": "forever start demo/app.js",
+    "stop-server": "forever stop demo/app.js",
     "start": "supervisor demo/app.js"
   }
 }
