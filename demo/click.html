@@ -97,7 +97,7 @@
                 return alert('请完成验证');
             }
             $.ajax({
-                url: '/gt/validate-click',
+                url: 'gt/validate-click',
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -122,7 +122,7 @@
 
 
     $.ajax({
-        url: "/gt/register-click?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        url: "gt/register-click?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
         dataType: "json",
         success: function (data) {

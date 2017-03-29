@@ -6,10 +6,7 @@ var Geetest = require('../gt-sdk');
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static('./'));
-app.get("/", function (req, res) {
-    res.sendFile(__dirname + "/list.html");
-});
+app.use(express.static('./demo'));
 
 var fullpage = require('./fullpage');
 app.get("/gt/register-fullpage", function (req, res) {
