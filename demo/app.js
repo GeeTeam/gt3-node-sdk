@@ -1,5 +1,6 @@
-var express = require("express");
-var bodyParser = require("body-parser");
+var express = require('express');
+var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var Geetest = require('../gt-sdk');
 
@@ -11,6 +12,12 @@ app.get("/", function (req, res) {
     res.sendFile(__dirname + "/login.html");
 });
 
+app.use(session({
+    secret: 'my-secret',
+    resave: false,
+    saveUninitialized: true
+}));
+
 // pc 端接口
 
 var captcha1 = new Geetest({
@@ -18,9 +25,11 @@ var captcha1 = new Geetest({
     geetest_key: '4f1c085290bec5afdc54df73535fc361'
 });
 app.get("/gt/register1", function (req, res) {
-
     // 向极验申请每次验证所需的challenge
-    captcha1.register(function (err, data) {
+    captcha1.register({
+        client_type: 'unknown',
+        ip_address: 'unknown'
+    }, function (err, data) {
         if (err) {
             console.error(err);
             return;
@@ -33,6 +42,7 @@ app.get("/gt/register1", function (req, res) {
             // 为以防万一，你可以选择以下两种方式之一：
 
             // 1. 继续使用极验提供的failback备用方案
+            req.session.fallback = true;
             res.send(data);
 
             // 2. 使用自己提供的备用方案
@@ -40,6 +50,7 @@ app.get("/gt/register1", function (req, res) {
 
         } else {
             // 正常模式
+            req.session.fallback = false;
             res.send(data);
         }
     });
@@ -48,7 +59,7 @@ app.get("/gt/register1", function (req, res) {
 app.post("/gt/form-validate1", function (req, res) {
 
     // 对form表单提供的验证凭证进行验证
-    captcha1.validate({
+    captcha1.validate(req.session.fallback, {
 
         geetest_challenge: req.body.geetest_challenge,
         geetest_validate: req.body.geetest_validate,
@@ -80,7 +91,10 @@ var captcha2 = new Geetest({
 app.get("/gt/register2", function (req, res) {
 
     // 向极验申请每次验证所需的challenge
-    captcha2.register(function (err, data) {
+    captcha2.register({
+        client_type: 'unknown',
+        ip_address: 'unknown'
+    }, function (err, data) {
         if (err) {
             console.error(err);
             return;
@@ -93,6 +107,7 @@ app.get("/gt/register2", function (req, res) {
             // 为以防万一，你可以选择以下两种方式之一：
 
             // 1. 继续使用极验提供的failback备用方案
+            req.session.fallback = true;
             res.send(data);
 
             // 2. 使用自己提供的备用方案
@@ -100,6 +115,7 @@ app.get("/gt/register2", function (req, res) {
 
         } else {
             // 正常模式
+            req.session.fallback = false;
             res.send(data);
         }
     });
@@ -108,7 +124,7 @@ app.get("/gt/register2", function (req, res) {
 app.post("/gt/ajax-validate2", function (req, res) {
 
     // 对ajax提供的验证凭证进行二次验证
-    captcha2.validate({
+    captcha2.validate(req.session.fallback, {
 
         geetest_challenge: req.body.geetest_challenge,
         geetest_validate: req.body.geetest_validate,

@@ -20,7 +20,7 @@ npm start
 
 # 使用说明
 
-sdk 提供 `Geetest` 构造函数，实例化时需要传入一个配置对象。
+sdk 提供 `Geetest` 构造函数，实例化时需要传入一个配置对象。为了更好的理解，请参照demo理解以下内容。
 
 配置对象的字段如下：
 
@@ -44,90 +44,20 @@ var captcha = new Geetest({
 
 上述 `Geetest` 的实例 `captcha` 提供两个方法：
 
-## `register(callback)`
+## `register(data, callback)`
 
-```js
-// 回调形式
-captcha.register(function (err, data) {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        if (!data.success) {
-            // 进入 failback，如果一直进入此模式，请检查服务器到极验服务器是否可访问
-            // 可以通过修改 hosts 把极验服务器 api.geetest.com 指到不可访问的地址
+`data` 给用户传入客户端的类型和ip地址（如果无法知道ip地址则填写`'unknown'`）。如果不想传 `data`，则传入 `null`。
 
-            // 为以防万一，你可以选择以下两种方式之一：
+类型有以下几种：
 
-            // 1. 继续使用极验提供的failback备用方案
-            // send(data);
+`'web'`: pc浏览器
+`'h5'`: 手机浏览器，包括webview
+`'native'`: 原生APP
+`'unknown'`: 未知
 
-            // 2. 使用自己提供的备用方案
-            // todo
-        } else {
-            // 正常模式
-            // send(data);
-        }
-    });
+## `validate(fallback, result, callback)`
 
-// Promise 形式
-captcha.register().then(function (data) {
-    if (!data.success) {
-        // 进入 failback，如果一直进入此模式，请检查服务器到极验服务器是否可访问
-        // 可以通过修改 hosts 把极验服务器 api.geetest.com 指到不可访问的地址
-    
-        // 为以防万一，你可以选择以下两种方式之一：
-    
-        // 1. 继续使用极验提供的failback备用方案
-        // send(data);
-    
-        // 2. 使用自己提供的备用方案
-        // todo
-    } else {
-        // 正常模式
-        // send(data);
-    }
-}, function (err) {
-    console.error(err);
-});
-```
-
-## `validate(result, callback)`
-
-```js
-// 回调形式
-captcha.validate({
-    geetest_challenge: 'xxx',
-    geetest_validate: 'xxx',
-    geetest_seccode: 'xxx'
-}, function (err, success) {
-    if (err) {
-        // 网络错误
-        // send(err);
-    } else if (!success) {
-        // 二次验证失败
-        // send('fail');
-    } else {
-        // send('success');
-    }
-});
-
-// Promise 形式
-captcha.validate({
-    geetest_challenge: 'xxx',
-    geetest_validate: 'xxx',
-    geetest_seccode: 'xxx'
-}).then(function (success) {
-    if (!success) {
-        // 二次验证失败
-        // send('fail');
-    } else {
-        // send('success');
-    }
-}, function (err) {
-    console.error(err);
-})
-```
+`fallback` 表示当前session是否宕机。
 
 ### 更新历史：[CHANGELOG](CHANGELOG.md)
 
