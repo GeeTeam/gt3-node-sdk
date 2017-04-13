@@ -6,9 +6,9 @@ var Geetest = require('../gt-sdk');
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static('./demo'));
+app.use(express.static('./demo/static'));
 
-var fullpage = require('./fullpage');
+var fullpage = require('./static/fullpage');
 app.get("/gt/register-fullpage", function (req, res) {
 
     // 向极验申请每次验证所需的challenge
@@ -71,7 +71,7 @@ app.post("/gt/validate-fullpage", function (req, res) {
     });
 });
 
-var click = require('./click');
+var click = require('./static/click');
 app.get("/gt/register-click", function (req, res) {
 
     // 向极验申请每次验证所需的challenge
@@ -134,7 +134,7 @@ app.post("/gt/validate-click", function (req, res) {
     });
 });
 
-var slide = require('./slide');
+var slide = require('./static/slide');
 app.get("/gt/register-slide", function (req, res) {
 
     // 向极验申请每次验证所需的challenge
@@ -197,7 +197,7 @@ app.post("/gt/validate-slide", function (req, res) {
     });
 });
 
-var test = require('./test');
+var test = require('./static/test');
 app.get("/gt/register-test", function (req, res) {
 
     // 向极验申请每次验证所需的challenge
