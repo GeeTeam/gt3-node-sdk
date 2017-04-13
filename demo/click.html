@@ -55,9 +55,7 @@
             color: #666;
             margin: 0;
         }
-        .geetest_popup_box {
-            width: 300px !important;
-        }
+
     </style>
 </head>
 <body>
@@ -84,10 +82,10 @@
     <div id="btn" class="btn">提交</div>
 </form>
 
-<!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 使用，减少代码量 -->
+<!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
 <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
 <!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
-<script src="//static.geetest.com/static/tools/gt.js"></script>
+<script src="libs/gt.js"></script>
 <script>
     var handler = function (captchaObj) {
         captchaObj.appendTo('#captcha');
@@ -120,9 +118,8 @@
                 }
             });
         })
-        // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
+        // 更多前端接口说明请参见：http://docs.geetest.com/install/client/web-front/
     };
-
 
     $.ajax({
         url: "gt/register-click?t=" + (new Date()).getTime(), // 加随机数防止缓存
@@ -142,7 +139,7 @@
 
                 product: "popup", // 产品形式，包括：float，popup
                 width: "300px"
-                // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+                // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         }
     });
