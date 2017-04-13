@@ -60,7 +60,7 @@
 <body>
 <h2><a href="./">返回</a></h2>
 <h1>一键通过模式</h1>
-<form id="form">
+<form id="form" action="gt/validate-fullpage" method="post">
     <div>
         <label for="username">用户名：</label>
         <input class="inp" id="username" type="text" value="用户名">
@@ -78,7 +78,7 @@
         </div>
     </div>
     <br>
-    <div id="btn" class="btn">提交</div>
+    <input class="btn" id="btn" type="submit" value="提交">
 </form>
 
 <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
@@ -87,35 +87,16 @@
 <script src="libs/gt.js"></script>
 <script>
     var handler = function (captchaObj) {
-        captchaObj.appendTo('#captcha');
+        captchaObj.appendTo('#captcha'); // 同时插入三个input表单时，geetest_challenge, geetest_validate, geetest_seccode
         captchaObj.onReady(function () {
             $("#wait").hide();
         });
-        $('#btn').click(function () {
+        $('#btn').click(function (e) {
             var result = captchaObj.getValidate();
             if (!result) {
+                e.preventDefault();
                 return alert('请完成验证');
             }
-            $.ajax({
-                url: 'gt/validate-fullpage',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    username: $('#username2').val(),
-                    password: $('#password2').val(),
-                    geetest_challenge: result.geetest_challenge,
-                    geetest_validate: result.geetest_validate,
-                    geetest_seccode: result.geetest_seccode
-                },
-                success: function (data) {
-                    if (data.status === 'success') {
-                        alert('登录成功');
-                    } else if (data.status === 'fail') {
-                        alert('登录失败，请完成验证');
-                        captchaObj.reset();
-                    }
-                }
-            });
         })
         // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
     };
