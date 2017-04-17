@@ -1,8 +1,7 @@
 var Geetest = require('../../gt-sdk');
 
 var captcha = new Geetest({
-    geetest_id: 'd84c7e8e5e27b68bc8e25c6da4556135',
-    geetest_key: 'de0250bcc4a5e8e7b156637b301cfe77'
+    geetest_id: 'e52c06c937981b90b275d0aff1d40076',
+    geetest_key: '02d6ff3aa1dd72ab1db7ebf90971a6e0'
 });
-
 module.exports = captcha;
