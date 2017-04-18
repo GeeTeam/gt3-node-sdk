@@ -59,5 +59,9 @@ var captcha = new Geetest({
 
 `fallback` 表示当前session是否宕机。
 
+# 注意事项
+
+1. 部署在生产环境中时，需要将js文件 demo/static/libs/gt.js 引入到页面中去。该js的作用是充分利用多CDN，使静态文件尽可能加载成功。
+
 ### 更新历史：[CHANGELOG](CHANGELOG.md)
 
