@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>投票场景</title>
+    <style>
+        body{margin:0;padding:0}
+        img{border:none}
+        .main-body {
+            width: 1100px;
+            margin:20px auto;
+        }
+        .nav-bar {
+            padding:6px 12px;
+            /*height: 60px;*/
+            background: #f2f4f6; font-size: 16px;
+            font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+        }
+
+        .nav-inner {
+            margin-left:-6px;
+            overflow:auto;
+        }
+        .nav-bar .stage {
+            display: block;
+            margin-left: 6px;
+            float: left;
+            width: 264px;
+            height: 48px;
+            line-height: 48px;
+            border-radius: 3px;
+            color: #282f3b;
+            text-decoration: none;
+            text-align: center
+        }
+            .nav-bar .stage:hover {
+                background: #56616c;
+                color: #eee;
+            }
+            .nav-bar .stage.active {
+                background:#56616c;color:#eee;
+            }
+
+        .page-content {
+            background:#f6f6f6
+        }
+        .h-tip {
+            padding:30px 0;
+            text-align:center;
+        }
+        .vote-body {
+            width:794px;margin:30px auto;
+            background:#fff;
+            border-radius:3px;
+            border:1px solid #ccc;
+            text-align: center;
+        }
+        
+        .vote-desc {
+            margin: 50px 0 46px;
+        }
+        .vote-desc p{
+           margin:0
+        }
+            .vote-desc .desc-1 {
+               font-size:22px;
+            }
+            .vote-desc .desc-2 {
+                margin-top:19px;
+                color:#999
+            }
+        .vote-list {
+            overflow: hidden;
+            font-size: 0
+        }
+        .vote-item {
+            display: inline-block;
+            width: 200px;
+            margin-left:30px;
+            font-size:14px;
+            cursor:pointer;
+        }
+        .vote-item img {
+            display: block;
+            width: 200px;
+            height: 200px;
+        }
+        .vote-info{margin-top:13px}
+        .vote-state{display:inline-block;width:10px;height:9px;border:1px solid #ccc;background-repeat:no-repeat}
+        .voted .vote-state {
+            background-image: url(/image/勾选.png)
+        }
+
+        .btn-vote{display:block;margin:50px auto 46px; width:154px;height:44px;line-height:44px;background:#ff5050;color:#fff;border-radius:24px;cursor:pointer}
+    </style>
+</head>
+<body>
+<div class="main-body">
+    <section class="nav-bar">
+        <div class="nav-inner">
+            <a href="#" class="stage">登陆场景</a>
+            <a href="#" class="stage">发送短信场景</a>
+            <a href="#" class="stage">发表评论场景</a>
+            <a href="#" class="stage active">投票场景</a>
+        </div>
+    </section>
+
+    <section class="page-content">
+        <p class="h-tip">*此处是将极验运用在投票场景的交互展示，请随意勾选投票项，点击“投票”按钮触发验证。</p>
+        <div class="vote-body">
+            <div class="vote-desc">
+                <p class="desc-1">航拍摄影“最佳人气奖”投选活动</p>
+                <p class="desc-2">选出您最喜欢的作品 (单选)</p>
+            </div>
+            <div class="vote-list">
+                <div class="vote-item voted" data-vid="23">
+                    <img src="/image/图1.png" />
+                    <p class="vote-info">
+                        <i class="vote-state"></i>
+                        <span class="vote-name">No.23</span>
+                    </p>
+                </div>
+                <div class="vote-item" data-vid="10">
+                    <img src="/image/图2.png" />
+                    <p class="vote-info">
+                        <i class="vote-state"></i>
+                        <span class="vote-name">No.10</span>
+                    </p>
+                </div>
+                <div class="vote-item" data-vid="56">
+                    <img src="/image/图3.png" />
+                    <p class="vote-info">
+                        <i class="vote-state"></i>
+                        <span class="vote-name">No.56</span>
+                    </p>
+                </div>
+            </div>
+            <div>
+                <span class="btn-vote">投票</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+<script src="libs/gt.js"></script>
+<script>
+    $(function ($) {
+        /*  点击选中投票项目   */
+        var $list = $('.vote-list'), tag = '.vote-item', act = 'voted',
+            _voteid = $(tag + '.' + act, $list).attr('data-vid');
+        $list.on('click', tag, function () {
+            var t = $(this);
+            $(tag + '.' + act, $list).not(t).removeClass(act);
+            t.toggleClass(act);
+            _voteid = t.hasClass(act) ? t.attr('data-vid') : '';
+        });
+        /*  处理验证事件    */
+        var handler = function (captchaObj) {
+            captchaObj.onReady(function () {
+                console.info('geetest has load')
+            }).onSuccess(function () {
+                var result = captchaObj.getValidate();
+                if (!result) {return alert('请完成验证操作！');}
+                $.ajax({
+                    url: 'gt/validate-test',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        voteid: _voteid,
+                        geetest_challenge: result.geetest_challenge,
+                        geetest_validate: result.geetest_validate,
+                        geetest_seccode: result.geetest_seccode
+                    },
+                    success: function (data) {
+                        if (data.status === 'success') {
+                            alert('感谢您的投票支持');
+                        } else if (data.status === 'fail') {
+                            alert('投票失败，请完成验证');
+                            captchaObj.reset();
+                        }
+                    }
+                });
+            });
+
+            $('.btn-vote').click(function () {
+                if (!_voteid) { return alert('请选择投票的摄影照片！'); }
+                captchaObj.verify();
+            });
+            // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
+        };
+
+
+        $.ajax({
+            url: "gt/register-test?t=" + (new Date()).getTime(), // 加随机数防止缓存
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+
+                // 调用 initGeetest 进行初始化
+                // 参数1：配置参数
+                // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+                initGeetest({
+                    // 以下 4 个配置参数为必须，不能缺少
+                    gt: data.gt,
+                    challenge: data.challenge,
+                    offline: !data.success, // 表示用户后台检测极验服务器是否宕机
+                    new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
+
+                    product: "bind", // 产品形式，包括：float，popup
+                    width: "300px"
+                    // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+                }, handler);
+            }
+        });
+
+    });
+</script>
+</body>
+</html>
