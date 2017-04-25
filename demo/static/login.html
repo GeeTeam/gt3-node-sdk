@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>投票场景</title>
+    <style>
+body{margin:0;padding:0}
+img{border:none}
+.hide{display:none}
+.main-body{width: 1100px;margin:20px auto;font-size:14px}
+.main-body .first{margin-left:0 !important}
+.nav-bar{padding:6px 12px;/*height: 60px;*/background: #f2f4f6;font-size: 16px;font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;}
+.nav-inner{margin-left:-6px;overflow:auto;}
+.nav-bar .stage{margin-left: 6px;float: left;width: 264px;height: 48px;line-height: 48px;border-radius: 3px;color: #282f3b;text-decoration: none;text-align: center}
+.nav-bar .stage:not(.active):hover{background: #e1e1e1;}
+.nav-bar .stage.active{background:#56616c;color:#eee;}
+.h-tip{padding:33px 0 30px;text-align:center;}
+
+
+.page-content{padding-bottom:320px;background:#f6f6f6}
+.login-body{width:420px;margin:30px auto;background:#fff;border-radius:3px;color:#999;text-align:left;box-shadow:0 0 5px 2px #ddd}
+.login-inner{width:260px;margin:0 auto}
+.login-h2{padding:52px 0 40px;text-align:center;letter-spacing:3px;color:#111;font-weight:normal}
+
+
+.input-row{position:relative;padding:12px 0 12px 34px;color:#a0aab0;border:1px solid #d1d1d1;background:#f4f4f4;border-radius:2px}
+.input-row input{display:block;width:100%;background:inherit;border:none;outline:none}
+.input-icon{position:absolute;left:12px;width:14px;height:14px;background-repeat:no-repeat;background-position:center}
+.email-row .input-icon{background-image:url(/image/USER.png)}
+.password-row .input-icon{background-image:url(/image/LOCK.png)}
+.password-row{margin-top:6px}
+.tool-row{margin:10px 0;clear:both;font-size:14px}
+.forget-pwd{float:right;color:inherit;text-decoration:none}
+.login-btn-row{position:relative;text-align:center}
+.btn-login{height:44px;line-height:44px;letter-spacing:3px;color:#fff;background:#13a9ff;cursor:pointer}
+
+.ui-tip{position:absolute;padding:0 10px;height:40px;line-height:40px;background:#fff7f7;color:#ff4242;border:1px solid;font-size:14px;white-space:nowrap}
+.ui-tip.tip-left{left:100%;top:1px;margin-left:20px;}
+.ui-tip.tip-left:before{position:absolute;content:'';top:50%;left:0;width:10px;height:10px;margin:-6px;background-color:inherit; border:1px solid;border-top-color:transparent;border-right-color:transparent;-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);-webkit-transform:rotate(45deg);transform:rotate(45deg); z-index:99}
+
+.side-login{margin-top:48px;text-align:center}
+.side-head{position:relative}
+.side-head-fake{position:relative;display:inline-block;padding:0 12px;visibility:hidden;}
+.side-head-txt{position:absolute;visibility:visible;top:0;left:0;width:100%;margin:0;background:#fff;color:#999;text-align:center;z-index:9}
+.side-head-line{position:absolute;top:50%;left:0;/*margin-top:1px;*/width:100%;height:1px;background:#ccc;}
+
+.side-loign-list{font-size:0;padding:16px 0 59px}
+.side-login-type{display:inline-block;width:50px;height:50px;margin-left:20px;background-repeat:no-repeat}
+.loginby-weibo{background-image:url(/image/微博.png)}
+.loginby-wechat{background-image:url(/image/微信.png)}
+.loginby-qq{background-image:url(/image/qq.png)}
+    </style>
+</head>
+<body>
+    <div class="main-body">
+        <section class="nav-bar">
+            <div class="nav-inner">
+                <a href="javascript:void(0);" class="stage active">登陆场景</a>
+                <a href="#" class="stage">发送短信场景</a>
+                <a href="#" class="stage">发表评论场景</a>
+                <a href="vote.html" class="stage">投票场景</a>
+            </div>
+        </section>
+
+        <section class="page-content">
+            <p class="h-tip">*此处是将极验运用在登陆场景的交互展示，表单请随意填写，点击“登陆”按钮触发验证。</p>
+            <div class="login-body">
+                <div class="login-inner">
+                    <h2 class="login-h2">登陆</h2>
+                    <form class="login-form">
+                        <div class="input-row email-row">
+                            <i class="input-icon"></i>
+                            <input type="text" name="email" placeholder="邮件" autocomplete="off"/>
+                        </div>
+                        <div class="input-row password-row">
+                            <i class="input-icon"></i>
+                            <input type="password" name="pwd" placeholder="密码" autocomplete="off"/>
+                        </div>
+                        <div class="tool-row">
+                            <label><input type="checkbox" name="remenber"/>记住密码</label>
+                            <a href="#" class="forget-pwd">忘记密码?</a>
+                        </div>
+                        <div class="login-btn-row">
+                            <div class="btn-login">登陆</div>
+                            <div class="hide ui-tip tip-left">验证未通过，请重试</div>
+                        </div>
+                    </form>
+                    <div class="side-login">
+                        <div class="side-head">
+                            <div class="side-head-fake">
+                                其他登陆方式
+                                <p class="side-head-txt">其他登陆方式</p>
+                            </div>
+                            <div class="side-head-line"></div>
+                        </div>
+                        <div class="side-loign-list">
+                            <a href="javascript:void(0);" class="side-login-type loginby-weibo first"></a>
+                            <a href="javascript:void(0);" class="side-login-type loginby-wechat"></a>
+                            <a href="javascript:void(0);" class="side-login-type loginby-qq"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
+    <!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+    <script src="libs/gt.js"></script>
+    <script>
+        $(function ($) {
+        /*  表单元素 和 标签   */
+            var $form = $('.login-form'),
+                $email = $('input[name=email]', $form),
+                $pwd = $('input[name=pwd]', $form),
+                $btn = $('.btn-login', $form),
+                $tip = $('.ui-tip', $form);
+        /*  处理验证事件    */
+        var handler = function (captchaObj) {
+            captchaObj.onReady(function () {
+                console.info('geetest has load')
+            }).onSuccess(function () {
+                var result = captchaObj.getValidate();
+                if (!result) {return alert('请完成验证操作！');}
+                $.ajax({
+                    url: 'gt/validate-test',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        email: $email.val(),
+                        pwd: $pwd.val(),
+                        geetest_challenge: result.geetest_challenge,
+                        geetest_validate: result.geetest_validate,
+                        geetest_seccode: result.geetest_seccode
+                    },
+                    success: function (data) {
+                        if (data.status === 'success') {
+                            removeError();
+                            alert('登陆成功');
+                        } else if (data.status === 'fail') {
+                            showError('登陆失败，请完成验证');
+                            captchaObj.reset();
+                        }
+                    }
+                });
+                });
+            function showError(msg) { $tip.removeClass('hide').text(msg) }
+            function removeError() {$tip.addClass('hide')}
+            $btn.click(function () {
+                if (!$email.val()) {return showError('请填写邮箱')}
+                if (!$pwd.val()) { return showError('请填写密码'); }
+                removeError();
+                captchaObj.verify();
+            });
+            // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
+        };
+
+
+        $.ajax({
+            url: "gt/register-test?t=" + (new Date()).getTime(), // 加随机数防止缓存
+            type: "get",
+            dataType: "json",
+            success: function (data) {
+
+                // 调用 initGeetest 进行初始化
+                // 参数1：配置参数
+                // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+                initGeetest({
+                    // 以下 4 个配置参数为必须，不能缺少
+                    gt: data.gt,
+                    challenge: data.challenge,
+                    offline: !data.success, // 表示用户后台检测极验服务器是否宕机
+                    new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
+
+                    product: "bind", // 产品形式，包括：float，popup
+                    width: "300px"
+                    // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+                }, handler);
+            }
+        });
+
+    });
+    </script>
+</body>
+</html>

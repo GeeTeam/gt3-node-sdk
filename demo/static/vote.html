@@ -5,104 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>投票场景</title>
     <style>
-        body{margin:0;padding:0}
-        img{border:none}
-        .main-body {
-            width: 1100px;
-            margin:20px auto;
-        }
-        .nav-bar {
-            padding:6px 12px;
-            /*height: 60px;*/
-            background: #f2f4f6; font-size: 16px;
-            font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
-        }
+body{margin:0;padding:0}
+img{border:none}
+.main-body{width: 1100px;margin:20px auto;}
+.main-body .first{margin-left:0 !important}
+.nav-bar{padding:6px 12px;/*height: 60px;*/background: #f2f4f6;font-size: 16px;font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;}
+.nav-inner{margin-left:-6px;overflow:auto;}
+.nav-bar .stage{margin-left: 6px;float: left;width: 264px;height: 48px;line-height: 48px;border-radius: 3px;color: #282f3b;text-decoration: none;text-align: center}
+.nav-bar .stage:hover{background: #e1e1e1;}
+.nav-bar .stage.active{background:#56616c;color:#eee;}
+.nav-bar .stage.active:hover{background: #56616c;color: #eee;}
+.h-tip{padding:33px 0 30px;text-align:center;font-size:14px}
 
-        .nav-inner {
-            margin-left:-6px;
-            overflow:auto;
-        }
-        .nav-bar .stage {
-            display: block;
-            margin-left: 6px;
-            float: left;
-            width: 264px;
-            height: 48px;
-            line-height: 48px;
-            border-radius: 3px;
-            color: #282f3b;
-            text-decoration: none;
-            text-align: center
-        }
-            .nav-bar .stage:hover {
-                background: #56616c;
-                color: #eee;
-            }
-            .nav-bar .stage.active {
-                background:#56616c;color:#eee;
-            }
 
-        .page-content {
-            background:#f6f6f6
-        }
-        .h-tip {
-            padding:30px 0;
-            text-align:center;
-        }
-        .vote-body {
-            width:794px;margin:30px auto;
-            background:#fff;
-            border-radius:3px;
-            border:1px solid #ccc;
-            text-align: center;
-        }
-        
-        .vote-desc {
-            margin: 50px 0 46px;
-        }
-        .vote-desc p{
-           margin:0
-        }
-            .vote-desc .desc-1 {
-               font-size:22px;
-            }
-            .vote-desc .desc-2 {
-                margin-top:19px;
-                color:#999
-            }
-        .vote-list {
-            overflow: hidden;
-            font-size: 0
-        }
-        .vote-item {
-            display: inline-block;
-            width: 200px;
-            margin-left:30px;
-            font-size:14px;
-            cursor:pointer;
-        }
-        .vote-item img {
-            display: block;
-            width: 200px;
-            height: 200px;
-        }
-        .vote-info{margin-top:13px}
-        .vote-state{display:inline-block;width:10px;height:9px;border:1px solid #ccc;background-repeat:no-repeat}
-        .voted .vote-state {
-            background-image: url(/image/勾选.png)
-        }
+.page-content{padding-bottom:320px;background:#f6f6f6}
 
-        .btn-vote{display:block;margin:50px auto 46px; width:154px;height:44px;line-height:44px;background:#ff5050;color:#fff;border-radius:24px;cursor:pointer}
+.vote-body{width:794px;margin:30px auto;background:#fff;border-radius:3px;border:1px solid #ccc;text-align: center;}
+.vote-desc{margin: 50px 0 46px;}
+.vote-desc p{margin:0}
+.vote-desc .desc-1{font-size:22px;}
+.vote-desc .desc-2{margin-top:19px;color:#999}
+.vote-list{overflow: hidden;font-size: 0}
+.vote-item{display: inline-block;width: 200px;margin-left:30px;font-size:14px;cursor:pointer;}
+.vote-item img{display: block;width: 200px;height: 200px;}
+.vote-info{margin-top:13px}
+.vote-state{display:inline-block;width:10px;height:9px;border:1px solid #ccc;background-repeat:no-repeat}
+.voted .vote-state{background-image: url(/image/勾选.png)}
+.btn-vote{display:block;margin:50px auto 46px;width:154px;height:44px;line-height:44px;background:#ff5050;color:#fff;border-radius:24px;cursor:pointer} 
     </style>
 </head>
 <body>
 <div class="main-body">
     <section class="nav-bar">
         <div class="nav-inner">
-            <a href="#" class="stage">登陆场景</a>
+            <a href="login.html" class="stage">登陆场景</a>
             <a href="#" class="stage">发送短信场景</a>
             <a href="#" class="stage">发表评论场景</a>
-            <a href="#" class="stage active">投票场景</a>
+            <a href="javascript:void(0);" class="stage active">投票场景</a>
         </div>
     </section>
 
@@ -114,7 +53,7 @@
                 <p class="desc-2">选出您最喜欢的作品 (单选)</p>
             </div>
             <div class="vote-list">
-                <div class="vote-item voted" data-vid="23">
+                <div class="vote-item voted first" data-vid="23">
                     <img src="/image/图1.png" />
                     <p class="vote-info">
                         <i class="vote-state"></i>
@@ -150,12 +89,12 @@
     $(function ($) {
         /*  点击选中投票项目   */
         var $list = $('.vote-list'), tag = '.vote-item', act = 'voted',
-            _voteid = $(tag + '.' + act, $list).attr('data-vid');
+            voteid = $(tag + '.' + act, $list).attr('data-vid');
         $list.on('click', tag, function () {
             var t = $(this);
             $(tag + '.' + act, $list).not(t).removeClass(act);
             t.toggleClass(act);
-            _voteid = t.hasClass(act) ? t.attr('data-vid') : '';
+            voteid = t.hasClass(act) ? t.attr('data-vid') : '';
         });
         /*  处理验证事件    */
         var handler = function (captchaObj) {
@@ -169,7 +108,7 @@
                     type: 'POST',
                     dataType: 'json',
                     data: {
-                        voteid: _voteid,
+                        voteid: voteid,
                         geetest_challenge: result.geetest_challenge,
                         geetest_validate: result.geetest_validate,
                         geetest_seccode: result.geetest_seccode
@@ -186,7 +125,7 @@
             });
 
             $('.btn-vote').click(function () {
-                if (!_voteid) { return alert('请选择投票的摄影照片！'); }
+                if (!voteid) { return alert('请选择投票的摄影照片！'); }
                 captchaObj.verify();
             });
             // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
