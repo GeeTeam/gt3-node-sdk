@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PC-注册</title>
+    <style>
+body { margin: 50px 0; text-align: center; font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif; }
+ul li { list-style: none; }
+input[type="button"] { cursor: pointer; }
+.container { margin: 0; padding: 0; position: absolute; left: 50%; transform: translateX(-50%); }
+li.item { width: 290px; height: 40px; margin-bottom: 10px; border: solid 1px #cccccc; border-radius: 2px; background: #f5f5f5; text-align: left; }
+li.item i { margin: 0 5px; display: inline-block; width: 14px; height: 14px; }
+li.item input { height: 100%; margin-left: 5px; border: 0; padding: 0; background: #f5f5f5; outline: 0; font-size: 16px; }
+li.item.msgtip { height: 20px; border: 0px; background: #fff; color: #59e85e; font-size: 15px; margin-top: 3px; text-align: center; }
+li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; }
+.b-icon { background-repeat: no-repeat; background-position: center; }
+.phoneIcon { background-image: url(./img/LOCK.png) }
+.verifyIcon { background-image: url(./img/USER.png) }
+.nickIcon { background-image: url(./img/USER.png) }
+.passwordIcon { background-image: url(./img/LOCK.png) }
+.verfycodeInput { border: solid 1px #cccccc; border-radius: 2px; display: inline-block; height: 100%; background: #f5f5f5; width: 49%; }
+#btnGetVerfycode { border: solid 1px #cccccc; border-radius: 2px; height: 100%; background: #0fd616; width: 48%; margin:0; }
+.verfycodeInput input { width: 100px; }
+#agreeprotocol { height: 13px; margin: 0; }
+#registerbtn { background: #cccccc; width: 100%; margin: 0; font-size: 20px; }
+#captcha { width: 300px; display: inline-block; }
+#wait { text-align: left; color: #666; margin: 0; }
+    </style>
+</head>
+<body>
+<h2><a href="./">返回</a></h2>
+<ul class="container">
+    <h3>注册</h3>
+    <li class="item"><i class="b-icon phoneIcon"></i><span>+86</span><input id="phone" type="tel" maxlength="11" placeholder="请输入手机号" /></li>
+    <li class="item noborder">
+        <span class="verfycodeInput"><i class="b-icon verifyIcon"></i><input id="verfycode"  placeholder="验证码" /></span>
+        <input type="button" maxlength="6" id="btnGetVerfycode" value="获取验证码">
+    </li>
+    <li class="item msgtip">请留意手机短信，获取验证码</li>
+    <li class="item"><i class="b-icon nickIcon"></i><input id="nickname"  placeholder="昵称" /></li>
+    <li class="item"><i class="b-icon passwordIcon"></i><input id="pwd" type="password"  placeholder="密码" /></li>
+    <li class="item noborder"><input type="checkbox" id="agreeprotocol"/>我同意服务条款</li>
+    <li class="item"><input type="button" id="registerbtn" value="注册"></li>
+</ul>
+
+<!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
+<script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+<script src="libs/gt.js"></script>
+<script>
+    var handler = function (captchaObj) {
+        captchaObj.onReady(function () {
+            $("#wait").hide();
+        }).onSuccess(function () {
+            var result = captchaObj.getValidate();
+            if (!result) {
+                return alert('请完成验证');
+            }
+            $.ajax({
+                url: 'gt/validate-click',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    username: $('#nickname').val(),
+                    password: $('#pwd').val(),
+                    geetest_challenge: result.geetest_challenge,
+                    geetest_validate: result.geetest_validate,
+                    geetest_seccode: result.geetest_seccode
+                },
+                success: function (data) {
+                    if (data.status === 'success') {
+                        alert('登录成功');
+                    } else if (data.status === 'fail') {
+                        alert('登录失败，请完成验证');
+                        captchaObj.reset();
+                    }
+                }
+            });
+        });
+        $('#registerbtn').click(function () {
+            if (beforeRegister() === false){
+                return;
+            }
+            captchaObj.verify();
+        })
+        // 更多前端接口说明请参见：http://docs.geetest.com/install/client/web-front/
+    };
+
+    $.ajax({
+        url: "gt/register-click?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+
+            // 调用 initGeetest 进行初始化
+            // 参数1：配置参数
+            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+            initGeetest({
+                // 以下 4 个配置参数为必须，不能缺少
+                gt: data.gt,
+                challenge: data.challenge,
+                offline: !data.success, // 表示用户后台检测极验服务器是否宕机
+                new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
+
+                product: "bind", // 产品形式，包括：float，popup
+                width: "300px"
+                // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+            }, handler);
+        }
+    });
+    var cacheCode = '';
+    function bindEvent(){
+        $("#btnGetVerfycode").on('click', function(){
+            var checkphone = checkPhoneNumber();
+            if (checkphone) {
+                cacheCode = getRandomCode();
+                alert('验证码： '+ cacheCode);
+            }
+        })
+    }
+    function checkPhoneNumber(){
+        var phoneEl = $('#phone');
+        var phonenumber = phoneEl.val();
+        if (!phonenumber) {
+            alert('请输入手机号！');
+            return false;
+        }
+        var phonereg = /^13\d{9}$/;
+        var result = phonereg.test(phonenumber);
+        if (!result) {
+            alert('请输入正确的手机号');
+        }
+        return result;
+    }
+    function checkVerifyCode(){
+        var code = $('#verfycode').val();
+        var result = code === cacheCode;
+        if (!result) {
+            alert('输入验证码有误，请重新获取!');
+        }
+        return result;
+    }
+    function checkname(){
+        var name = $('#nickname');
+        if (!name) {
+            alert('昵称必填!');
+            return false;
+        }
+        return true;
+    }
+    function checkpassword(){
+        var pwd = $('#pwd');
+        if (!pwd) {
+            alert('密码必填!');
+            return false;
+        }
+        return true;
+    }
+    function checkIsAgree(){
+        var result = $("#agreeprotocol")[0].checked;
+        if (!result){
+            alert('请同意服务协议')
+        }
+        return result;
+    }
+    function getRandomCode() {
+        return Math.random().toString('32').substring(2,8);
+    }
+    function beforeRegister(){
+        if (checkPhoneNumber() === false){
+            return false;
+        }
+        if (checkVerifyCode() === false) {
+            return false;
+        }
+        if (checkname() === false) {
+            return false;
+        }
+        if (checkpassword() === false){
+            return false;
+        }
+        if (checkIsAgree() === false){
+            return false;
+        }        
+        return true;
+    }
+
+    //
+    bindEvent();
+</script>
+</body>
+</html>
