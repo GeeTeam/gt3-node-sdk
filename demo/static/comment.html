@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>评论场景</title>
+    <style>
+body { margin: 50px 0; text-align: center; font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif; }
+.tip-msg { margin-top: 33px; margin-bottom: 30px; font-size: 14px; color: #282f3b; }
+.c-box { width: 794px; height: 532px; border: solid 1px #c6c6c6; left: 50%; transform: translateX(-50%); position: absolute; text-align: left; }
+.c-title { height: 46px; background: #f1f1f1; }
+.c-t-text { margin-left: 19px; font-size: 20px; display: inline-block; margin-top: 10px; }
+.c-content { background: #ffffff; margin-left: 25px; margin-right: 25px; }
+.c-c-top { padding-top: 15px; padding-bottom: 15px; position: relative; }
+.c-c-top-left { margin-left: 15px; color: #808080; }
+.c-c-top-right { right: 15px; position: absolute; color: #808080; }
+.c-c-top-left em { margin-right: 28px; display: inline-block; font-style: normal; }
+.c-c-top-left i { background-repeat: no-repeat; display: inline-block; width: 17px; height: 17px; margin-right: 6px; vertical-align: middle; }
+.i-font { background-image: url('./img/字号.png'); }
+.i-emoji { background-image: url('./img/表情.png'); }
+.i-pic { background-image: url('./img/图片.png'); }
+.c-c-text { border: solid 1px #c6c6c6; width: 740px; height: 300px; }
+.c-c-bottom { color: #282f3b; }
+.i-uncheck { background-repeat: no-repeat; display: inline-block; width: 17px; height: 17px; margin-right: 6px; vertical-align: middle; background-image: url('./img/选框.png') }
+.i-checked { background-repeat: no-repeat; display: inline-block; width: 10px; height: 14px; vertical-align: middle; background-image: url('./img/勾选.png') }
+.c-bottom { text-align: center; }
+#btnPostComment { margin-top: 20px; width: 154px; height: 44px; background: #eb863b; color: #fff; padding: 0; border: 0; font-size: 16px; }
+#captcha { width: 300px; display: inline-block; }
+#wait { text-align: left; color: #666; margin: 0; }
+    </style>
+</head>
+<body>
+<div class="tip-msg">*此处是将极验运用在评论场景的交互展示，表单随意填写， 点击"发表评论"按钮触发验证。</div>
+<div class="c-box">
+    <div class="c-title"><span class="c-t-text">发表评论</span></div>
+    <div class="c-content">
+        <div class="c-c-top">
+            <span class="c-c-top-left"><em><i class="i-font"></i><span>字号</span></em><em><i class="i-emoji"></i>表情</em><em><i class="i-pic"></i>图片</em></span>
+            <span class="c-c-top-right">发表评论请遵守论坛规则</span>
+        </div>
+        <textarea class="c-c-text" id="comment"></textarea>
+        <div class="c-c-bottom js_sign"><i class="i-uncheck"></i>使用签名</div>
+    </div>
+    <div class="c-bottom">
+        <input type="button" id="btnPostComment" value="发表评论" />
+    </div>
+</div>
+<!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
+<script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+<script src="libs/gt.js"></script>
+<script>
+    var handler = function (captchaObj) {
+        captchaObj.onReady(function () {
+            $("#wait").hide();
+        }).onSuccess(function () {
+            var result = captchaObj.getValidate();
+            if (!result) {
+                return alert('请完成验证');
+            }
+            $.ajax({
+                url: 'gt/validate-click',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    comment: $('#comment').val(),
+                    geetest_challenge: result.geetest_challenge,
+                    geetest_validate: result.geetest_validate,
+                    geetest_seccode: result.geetest_seccode
+                },
+                success: function (data) {
+                    if (data.status === 'success') {
+                        alert('评论成功');
+                    } else if (data.status === 'fail') {
+                        alert('评论失败，请完成验证');
+                        captchaObj.reset();
+                    }
+                }
+            });
+        });
+        $('#btnPostComment').click(function () {
+            if(!$('#comment').val()){
+                alert('请先填写评论内容');
+                return;
+            }
+            captchaObj.verify();
+        })
+        // 更多前端接口说明请参见：http://docs.geetest.com/install/client/web-front/
+    };
+
+    $.ajax({
+        url: "gt/register-click?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+
+            // 调用 initGeetest 进行初始化
+            // 参数1：配置参数
+            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+            initGeetest({
+                // 以下 4 个配置参数为必须，不能缺少
+                gt: data.gt,
+                challenge: data.challenge,
+                offline: !data.success, // 表示用户后台检测极验服务器是否宕机
+                new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
+
+                product: "bind", // 产品形式，包括：float，popup
+                width: "300px"
+                // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+            }, handler);
+        }
+    });
+
+    $('.js_sign').on('click', function(e){
+        var target = $(e.currentTarget);
+        var parent = target.find('i.i-uncheck')
+        var iel = target.find('i.i-checked');
+        var checkedEl = "<i class='i-checked'></i>";
+        if (iel.length){
+            iel.remove();
+        } else {
+            parent.append(checkedEl);
+        }
+    });
+
+</script>
+</body>
+</html>
