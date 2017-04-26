@@ -25,7 +25,8 @@ img{border:none}
 
 
 .input-row{position:relative;padding:12px 0 12px 34px;color:#a0aab0;border:1px solid #d1d1d1;background:#f4f4f4;border-radius:2px}
-.input-row input{display:block;width:100%;background:inherit;border:none;outline:none}
+.input-row input{display:block;width:92%;background:inherit;border:none;outline:none}
+.input-row input:-webkit-autofill{-webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 1000px white inset;}
 .input-icon{position:absolute;left:12px;width:14px;height:14px;background-repeat:no-repeat;background-position:center}
 .email-row .input-icon{background-image:url(/image/USER.png)}
 .password-row .input-icon{background-image:url(/image/LOCK.png)}
@@ -35,10 +36,10 @@ img{border:none}
 .login-btn-row{position:relative;text-align:center}
 .btn-login{height:44px;line-height:44px;letter-spacing:3px;color:#fff;background:#13a9ff;cursor:pointer}
 
-.ui-tip{position:absolute;padding:0 10px;height:40px;line-height:40px;background:#fff7f7;color:#ff4242;border:1px solid;font-size:14px;white-space:nowrap}
+.ui-tip{display:none;position:absolute;padding:0 10px;height:40px;line-height:40px;background:#fff7f7;color:#ff4242;border:1px solid;font-size:14px;white-space:nowrap}
 .ui-tip.tip-left{left:100%;top:1px;margin-left:20px;}
 .ui-tip.tip-left:before{position:absolute;content:'';top:50%;left:0;width:10px;height:10px;margin:-6px;background-color:inherit; border:1px solid;border-top-color:transparent;border-right-color:transparent;-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);-webkit-transform:rotate(45deg);transform:rotate(45deg); z-index:99}
-
+.error .ui-tip{display:block}
 .side-login{margin-top:48px;text-align:center}
 .side-head{position:relative}
 .side-head-fake{position:relative;display:inline-block;padding:0 12px;visibility:hidden;}
@@ -72,10 +73,12 @@ img{border:none}
                         <div class="input-row email-row">
                             <i class="input-icon"></i>
                             <input type="text" name="email" placeholder="邮件" autocomplete="off"/>
+                            <div class="ui-tip tip-left"></div>
                         </div>
                         <div class="input-row password-row">
                             <i class="input-icon"></i>
                             <input type="password" name="pwd" placeholder="密码" autocomplete="off"/>
+                            <div class="ui-tip tip-left"></div>
                         </div>
                         <div class="tool-row">
                             <label><input type="checkbox" name="remenber"/>记住密码</label>
@@ -83,7 +86,7 @@ img{border:none}
                         </div>
                         <div class="login-btn-row">
                             <div class="btn-login">登陆</div>
-                            <div class="hide ui-tip tip-left">验证未通过，请重试</div>
+                            <div class="ui-tip tip-left"></div>
                         </div>
                     </form>
                     <div class="side-login">
@@ -115,14 +118,15 @@ img{border:none}
                 $email = $('input[name=email]', $form),
                 $pwd = $('input[name=pwd]', $form),
                 $btn = $('.btn-login', $form),
-                $tip = $('.ui-tip', $form);
+                nsTip = '.ui-tip', nsErr = 'error';
         /*  处理验证事件    */
         var handler = function (captchaObj) {
             captchaObj.onReady(function () {
                 console.info('geetest has load')
             }).onSuccess(function () {
                 var result = captchaObj.getValidate();
-                if (!result) {return alert('请完成验证操作！');}
+                if (!result) { return showError($btn,'验证未通过，请重试'); }
+                removeError($btn);
                 $.ajax({
                     url: 'gt/validate-test',
                     type: 'POST',
@@ -139,18 +143,20 @@ img{border:none}
                             removeError();
                             alert('登陆成功');
                         } else if (data.status === 'fail') {
-                            showError('登陆失败，请完成验证');
+                            showError($btn,'登陆失败，请完成验证 ');
                             captchaObj.reset();
                         }
                     }
                 });
                 });
-            function showError(msg) { $tip.removeClass('hide').text(msg) }
-            function removeError() {$tip.addClass('hide')}
+            function showError($el, msg) { $(nsTip, $el.parent().addClass(nsErr)).text(msg); $el[0]&&$el[0].tagName === 'INPUT' && $el[0].focus(); }
+            function removeError($el) {
+                if ($el) { $el.parent().removeClass(nsErr) }
+                else {$('.' + nsErr, $form).removeClass(nsErr)}
+            }
             $btn.click(function () {
-                if (!$email.val()) {return showError('请填写邮箱')}
-                if (!$pwd.val()) { return showError('请填写密码'); }
-                removeError();
+                if (!$email.val()) { return showError($email,'请填写邮箱') } else { removeError($email) }
+                if (!$pwd.val()) { return showError($pwd, '请填写密码') } else { removeError($pwd) }
                 captchaObj.verify();
             });
             // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
