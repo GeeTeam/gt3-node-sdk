@@ -3,11 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>评论场景</title>
+    <title>发表评论场景</title>
     <style>
-body { margin: 50px 0; text-align: center; font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif; }
-.tip-msg { margin-top: 33px; margin-bottom: 30px; font-size: 14px; color: #282f3b; }
-.c-box { width: 794px; height: 532px; border: solid 1px #c6c6c6; left: 50%; transform: translateX(-50%); position: absolute; text-align: left; }
+body { margin: 0; text-align: center; font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif; }
+.main-body{width: 1100px;margin:20px auto;}
+.nav-bar{padding:6px 12px;/*height: 60px;*/background: #f2f4f6;font-size: 16px;font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;}
+.nav-inner{margin-left:-6px;overflow:auto;}
+.nav-bar .stage{margin-left: 6px;float: left;width: 264px;height: 48px;line-height: 48px;border-radius: 3px;color: #282f3b;text-decoration: none;text-align: center}
+.nav-bar .stage:hover{background: #e1e1e1;}
+.nav-bar .stage.active{background:#56616c;color:#eee;}
+.nav-bar .stage.active:hover{background: #56616c;color: #eee;}
+.page-content{padding-bottom:320px;background:#f6f6f6}
+.h-tip{padding:33px 0 30px;text-align:center;font-size:14px}
+.c-box { width: 794px; height: 532px; border: solid 1px #c6c6c6; margin:auto; text-align: left; background: #fff;}
 .c-title { height: 46px; background: #f1f1f1; }
 .c-t-text { margin-left: 19px; font-size: 20px; display: inline-block; margin-top: 10px; }
 .c-content { background: #ffffff; margin-left: 25px; margin-right: 25px; }
@@ -21,8 +29,9 @@ body { margin: 50px 0; text-align: center; font-family: "PingFangSC-Regular", "O
 .i-pic { background-image: url('./img/图片.png'); }
 .c-c-text { border: solid 1px #c6c6c6; width: 740px; height: 300px; }
 .c-c-bottom { color: #282f3b; }
-.i-uncheck { background-repeat: no-repeat; display: inline-block; width: 17px; height: 17px; margin-right: 6px; vertical-align: middle; background-image: url('./img/选框.png') }
-.i-checked { background-repeat: no-repeat; display: inline-block; width: 10px; height: 14px; vertical-align: middle; background-image: url('./img/勾选.png') }
+.i-uncheck { display: inline-block; width: 10px; height: 10px; border:solid 1px #c6c6c6; vertical-align: middle; margin:2px;}
+/*.i-checked { background-repeat: no-repeat; background-image: url('./img/勾选.png') }*/
+.i-checked:after { content:''; width: 10px; height: 5px; border-left: solid 1px #15ca6e; border-bottom: solid 2px #15ca6e; transform: rotate(-45deg); position: absolute; }
 .c-bottom { text-align: center; }
 #btnPostComment { margin-top: 20px; width: 154px; height: 44px; background: #eb863b; color: #fff; padding: 0; border: 0; font-size: 16px; }
 #captcha { width: 300px; display: inline-block; }
@@ -30,20 +39,32 @@ body { margin: 50px 0; text-align: center; font-family: "PingFangSC-Regular", "O
     </style>
 </head>
 <body>
-<div class="tip-msg">*此处是将极验运用在评论场景的交互展示，表单随意填写， 点击"发表评论"按钮触发验证。</div>
-<div class="c-box">
-    <div class="c-title"><span class="c-t-text">发表评论</span></div>
-    <div class="c-content">
-        <div class="c-c-top">
-            <span class="c-c-top-left"><em><i class="i-font"></i><span>字号</span></em><em><i class="i-emoji"></i>表情</em><em><i class="i-pic"></i>图片</em></span>
-            <span class="c-c-top-right">发表评论请遵守论坛规则</span>
+<div class="main-body">
+    <section class="nav-bar">
+        <div class="nav-inner">
+            <a href="login.html" class="stage">登陆场景</a>
+            <a href="pc-register.html" class="stage">发送短信场景</a>            
+            <a href="javascript:void(0)" class="stage active">发表评论场景</a>
+            <a href="vote.html" class="stage">投票场景</a>
         </div>
-        <textarea class="c-c-text" id="comment"></textarea>
-        <div class="c-c-bottom js_sign"><i class="i-uncheck"></i>使用签名</div>
-    </div>
-    <div class="c-bottom">
-        <input type="button" id="btnPostComment" value="发表评论" />
-    </div>
+    </section>
+    <section class="page-content">
+        <p class="h-tip">*此处是将极验运用在评论场景的交互展示，表单随意填写， 点击"发表评论"按钮触发验证。</p>
+        <div class="c-box">
+            <div class="c-title"><span class="c-t-text">发表评论</span></div>
+            <div class="c-content">
+                <div class="c-c-top">
+                    <span class="c-c-top-left"><em><i class="i-font"></i><span>字号</span></em><em><i class="i-emoji"></i>表情</em><em><i class="i-pic"></i>图片</em></span>
+                    <span class="c-c-top-right">发表评论请遵守论坛规则</span>
+                </div>
+                <textarea class="c-c-text" id="comment"></textarea>
+                <div class="c-c-bottom js_sign"><i class="i-uncheck"></i>使用签名</div>
+            </div>
+            <div class="c-bottom">
+                <input type="button" id="btnPostComment" value="发表评论" />
+            </div>
+        </div>
+    </section>
 </div>
 <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
 <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
@@ -113,13 +134,11 @@ body { margin: 50px 0; text-align: center; font-family: "PingFangSC-Regular", "O
 
     $('.js_sign').on('click', function(e){
         var target = $(e.currentTarget);
-        var parent = target.find('i.i-uncheck')
-        var iel = target.find('i.i-checked');
-        var checkedEl = "<i class='i-checked'></i>";
-        if (iel.length){
-            iel.remove();
+        var iel = target.find('i');
+        if (iel.hasClass('i-checked')){
+            iel.removeClass('i-checked');
         } else {
-            parent.append(checkedEl);
+            iel.addClass('i-checked');
         }
     });
 

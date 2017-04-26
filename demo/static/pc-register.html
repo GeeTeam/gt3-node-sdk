@@ -3,23 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PC-注册</title>
+    <title>发送短信场景</title>
     <style>
-body { margin: 50px 0; text-align: center; font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif; }
+body { margin: 0; padding: 0; text-align: center; font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif; }
 ul li { list-style: none; }
 input[type="button"] { cursor: pointer; }
-.container { margin: 0; padding: 0; position: absolute; left: 50%; transform: translateX(-50%); }
-li.item { width: 290px; height: 40px; margin-bottom: 10px; border: solid 1px #cccccc; border-radius: 2px; background: #f5f5f5; text-align: left; }
+.main-body{width: 1100px;margin:20px auto;}
+.nav-bar{padding:6px 12px;/*height: 60px;*/background: #f2f4f6;font-size: 16px;font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;}
+.nav-inner{margin-left:-6px;overflow:auto;}
+.nav-bar .stage{margin-left: 6px;float: left;width: 264px;height: 48px;line-height: 48px;border-radius: 3px;color: #282f3b;text-decoration: none;text-align: center}
+.nav-bar .stage:hover{background: #e1e1e1;}
+.nav-bar .stage.active{background:#56616c;color:#eee;}
+.nav-bar .stage.active:hover{background: #56616c;color: #eee;}
+.page-content{padding-bottom:320px;background:#f6f6f6}
+.h-tip{padding:33px 0 30px;text-align:center;font-size:14px}
+.container { width: 400px; margin: 30px auto; padding:20px 10px 60px 10px; box-shadow: 0 0 5px 2px #ddd; background: #fff;}
+li.item { width: 290px; height: 40px; margin: 5px auto; border: solid 1px #cccccc; border-radius: 2px; background: #f5f5f5; text-align: left; }
 li.item i { margin: 0 5px; display: inline-block; width: 14px; height: 14px; }
 li.item input { height: 100%; margin-left: 5px; border: 0; padding: 0; background: #f5f5f5; outline: 0; font-size: 16px; }
+li.item input:-webkit-autofill{-webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 1000px white inset;}
 li.item.msgtip { height: 20px; border: 0px; background: #fff; color: #15ca6e; font-size: 14px; margin-top: 9px; margin-bottom: 5px; text-align: center; }
-li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 292px}
+li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 292px;  margin: 5px auto;}
 .b-icon { background-repeat: no-repeat; background-position: center; }
 .phoneIcon { background-image: url(./img/LOCK.png) }
 .verifyIcon { background-image: url(./img/USER.png) }
 .nickIcon { background-image: url(./img/USER.png) }
 .passwordIcon { background-image: url(./img/LOCK.png) }
-.verfycodeInput { border: solid 1px #cccccc; border-radius: 2px; display: inline-block; height: 42px; background: #f5f5f5; width: 159px}
+.verfycodeInput { border: solid 1px #cccccc; border-radius: 2px; display: inline-block; height: 42px; background: #f5f5f5; width: 158px; margin-right: 4px;}
 #btnGetVerfycode { border: solid 1px #cccccc; border-radius: 2px; height: 44px; background: #15ca6e; width: 126px; margin:0; }
 .verfycodeInput input { width: 100px; }
 #agreeprotocol { height: 13px; margin: 0; }
@@ -29,20 +39,32 @@ li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 
     </style>
 </head>
 <body>
-<h2><a href="./">返回</a></h2>
-<ul class="container">
-    <h3>注册</h3>
-    <li class="item"><i class="b-icon phoneIcon"></i><span>+86</span><input id="phone" type="tel" maxlength="11" placeholder="请输入手机号" /></li>
-    <li class="item noborder">
-        <span class="verfycodeInput"><i class="b-icon verifyIcon"></i><input id="verfycode"  placeholder="验证码" /></span>
-        <input type="button" maxlength="6" id="btnGetVerfycode" value="获取验证码">
-    </li>
-    <li class="item msgtip">请留意手机短信，获取验证码</li>
-    <li class="item"><i class="b-icon nickIcon"></i><input id="nickname"  placeholder="昵称" /></li>
-    <li class="item"><i class="b-icon passwordIcon"></i><input id="pwd" type="password"  placeholder="密码" /></li>
-    <li class="item noborder"><input type="checkbox" id="agreeprotocol"/>我同意服务条款</li>
-    <li class="item"><input type="button" id="registerbtn" value="注册"></li>
-</ul>
+<div class="main-body">
+    <section class="nav-bar">
+        <div class="nav-inner">
+            <a href="login.html" class="stage">登陆场景</a>
+            <a href="javascript:void(0);" class="stage active">发送短信场景</a>            
+            <a href="comment.html" class="stage">发表评论场景</a>
+            <a href="vote.html" class="stage">投票场景</a>
+        </div>
+    </section>
+
+    <section class="page-content">
+        <p class="h-tip">*此处是将极验运用在注册场景的交互展示，表单请随意填写，点击“获取验证码”按钮触发验证。</p>
+        <ul class="container">
+            <h3>注册</h3>
+            <li class="item"><i class="b-icon phoneIcon"></i><span>+86</span><input id="phone" type="tel" maxlength="11" placeholder="请输入手机号" /></li>
+            <li class="item noborder">
+                <span class="verfycodeInput"><i class="b-icon verifyIcon"></i><input id="verfycode"  placeholder="验证码" /></span><input type="button" maxlength="6" id="btnGetVerfycode" value="获取验证码">
+            </li>
+            <li class="item msgtip">请留意手机短信，获取验证码</li>
+            <li class="item"><i class="b-icon nickIcon"></i><input id="nickname"  placeholder="昵称" /></li>
+            <li class="item"><i class="b-icon passwordIcon"></i><input id="pwd" type="password"  placeholder="密码" /></li>
+            <li class="item noborder"><input type="checkbox" id="agreeprotocol"/>我同意服务条款</li>
+            <li class="item"><input type="button" id="registerbtn" value="注册"></li>
+        </ul>
+    </section>
+</div>
 
 <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
 <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
