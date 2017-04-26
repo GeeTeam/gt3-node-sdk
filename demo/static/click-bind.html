@@ -101,10 +101,14 @@
                 },
                 success: function (data) {
                     if (data.status === 'success') {
-                        alert('登录成功');
+                        setTimeout(function () {
+                            alert('登录成功');
+                        }, 1500);
                     } else if (data.status === 'fail') {
-                        alert('登录失败，请完成验证');
-                        captchaObj.reset();
+                        setTimeout(function () {
+                            alert('登录失败，请完成验证');
+                            captchaObj.reset();
+                        }, 1500);
                     }
                 }
             });
