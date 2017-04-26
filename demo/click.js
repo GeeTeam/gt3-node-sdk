@@ -1,4 +1,4 @@
-var Geetest = require('../../gt-sdk');
+var Geetest = require('../gt-sdk');
 
 var captcha = new Geetest({
     geetest_id: '6216680937717fdab947ed9e71a3aaa1',
