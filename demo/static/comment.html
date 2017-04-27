@@ -1,18 +1,25 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>发表评论场景</title>
     <style>
-body { margin: 0; text-align: center; font-size:14px; font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif; }
+body { margin: 0; text-align: center; font-size:14px;font-family:"PingFangSC-Regular","Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif, "Open Sans", Arial, "Hiragino Sans GB";}
 .main-body{width: 1100px;margin:20px auto;}
-.nav-bar{padding:6px 12px;/*height: 60px;*/background: #f2f4f6;font-size: 16px;font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;}
+.nav-bar{padding:6px 12px;/*height: 60px;*/background: #f2f4f6;font-size: 16px;}
 .nav-inner{margin-left:-6px;overflow:auto;}
 .nav-bar .stage{margin-left: 6px;float: left;width: 264px;height: 48px;line-height: 48px;border-radius: 3px;color: #282f3b;text-decoration: none;text-align: center}
 .nav-bar .stage:hover{background: #e1e1e1;}
 .nav-bar .stage.active{background:#56616c;color:#eee;}
 .nav-bar .stage.active:hover{background: #56616c;color: #eee;}
+
+/*  ui公用错误提示贴条  */
+.ui-tip{display:none;position:absolute;padding:0 10px;height:40px;line-height:40px;background:#fff7f7;color:#ff4242;border:1px solid;font-size:14px;white-space:nowrap;border-radius:2px}
+.ui-tip.tip-left{left:100%;top:0;margin-left:12px;}
+.ui-tip.tip-left:before{position:absolute;content:'';top:50%;left:0;width:6px;height:6px;margin:-4px;background-color:inherit; border:1px solid;border-top-color:transparent;border-right-color:transparent;-ms-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);-webkit-transform:rotate(45deg);transform:rotate(45deg); z-index:99}
+.error .ui-tip{display:block}
+
 .page-content{padding-bottom:320px;background:#f6f6f6}
 .h-tip{padding:33px 0 30px;text-align:center;font-size:14px}
 .c-box { width: 794px; height: 532px; border: solid 1px #c6c6c6; margin:auto; text-align: left; background: #fff;}
@@ -27,13 +34,15 @@ body { margin: 0; text-align: center; font-size:14px; font-family: "PingFangSC-R
 .i-font { background-image: url('./img/字号.png'); }
 .i-emoji { background-image: url('./img/表情.png'); }
 .i-pic { background-image: url('./img/图片.png'); }
-.c-c-text { border: solid 1px #c6c6c6; width: 740px; height: 300px; }
+.c-text-wrap{position:relative}
+.c-text-wrap .ui-tip{margin-left:16px}
+.c-c-text {display:block;border: solid 1px #c6c6c6; width: 100%; height: 300px; }
 .c-c-bottom { color: #282f3b; }
 .i-uncheck { display: inline-block; width: 10px; height: 10px; border:solid 1px #c6c6c6; vertical-align: middle; margin:4px;}
 /*.i-checked { background-repeat: no-repeat; background-image: url('./img/勾选.png') }*/
 .i-checked:after { content:''; width: 10px; height: 5px; border-left: solid 1px #15ca6e; border-bottom: solid 2px #15ca6e; transform: rotate(-45deg); position: absolute; }
-.c-bottom { text-align: center; }
-#btnPostComment { margin-top: 20px; width: 154px; height: 44px; background: #eb863b; color: #fff; padding: 0; border: 0; font-size: 16px; }
+.c-bottom {position:relative;width: 154px;margin:20px auto}
+#btnPostComment {display:block;width:100%;height:44px;background: #eb863b; color: #fff; padding: 0; border: 0; font-size: 16px; }
 #captcha { width: 300px; display: inline-block; }
 #wait { text-align: left; color: #666; margin: 0; }
     </style>
@@ -57,11 +66,15 @@ body { margin: 0; text-align: center; font-size:14px; font-family: "PingFangSC-R
                     <span class="c-c-top-left"><em><i class="i-font"></i><span>字号</span></em><em><i class="i-emoji"></i>表情</em><em><i class="i-pic"></i>图片</em></span>
                     <span class="c-c-top-right">发表评论请遵守论坛规则</span>
                 </div>
-                <textarea class="c-c-text" id="comment"></textarea>
+                <div class="c-text-wrap">
+                    <textarea class="c-c-text" id="comment"></textarea>
+                    <div class="ui-tip tip-left"></div>
+                </div>
                 <div class="c-c-bottom js_sign"><i class="i-uncheck"></i>使用签名</div>
             </div>
             <div class="c-bottom">
                 <input type="button" id="btnPostComment" value="发表评论" />
+                <div class="ui-tip tip-left"></div>
             </div>
         </div>
     </section>
@@ -71,10 +84,24 @@ body { margin: 0; text-align: center; font-size:14px; font-family: "PingFangSC-R
 <!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
 <script src="libs/gt.js"></script>
 <script>
+    function showError($el, msg) { $('.ui-tip', $el.parent().addClass('error')).text(msg); $el[0] && $el[0].tagName === 'INPUT' && $el[0].focus(); }
+    function hideError($el) {
+        if ($el) { $el.parent().removeClass('error') }
+        else { $('.error', '.c-box').removeClass('error') }
+    }
     var handler = function (captchaObj) {
         captchaObj.onReady(function () {
-            $("#wait").hide();
+            console.info('geetest is ready')
+        }).onClose(function () {
+            showError($('#btnPostComment'), '请完成验证操作');
         }).onSuccess(function () {
+            /* 延迟到动画结束后再alert */
+            var lastUTC = new Date(), duration = 1100;
+            function _alert(msg) {
+                var elapsed = new Date() - lastUTC;
+                if (elapsed >= duration) { return alert(msg) }
+                setTimeout(function () { alert(msg) }, duration - elapsed);
+            }
             var result = captchaObj.getValidate();
             if (!result) {
                 return alert('请完成验证');
@@ -91,18 +118,19 @@ body { margin: 0; text-align: center; font-size:14px; font-family: "PingFangSC-R
                 },
                 success: function (data) {
                     if (data.status === 'success') {
-                        alert('评论成功');
+                        _alert('评论成功');
                     } else if (data.status === 'fail') {
-                        alert('评论失败，请完成验证');
+                        _alert('评论失败，请完成验证');
                         captchaObj.reset();
                     }
                 }
             });
         });
         $('#btnPostComment').click(function () {
-            if(!$('#comment').val()){
-                alert('请先填写评论内容');
-                return;
+            hideError();
+            var commet = $('#comment');
+            if (!commet.val()) {
+                return showError(commet, '请先填写评论内容');
             }
             captchaObj.verify();
         })
@@ -131,7 +159,6 @@ body { margin: 0; text-align: center; font-size:14px; font-family: "PingFangSC-R
             }, handler);
         }
     });
-
     $('.js_sign').on('click', function(e){
         var target = $(e.currentTarget);
         var iel = target.find('i');
