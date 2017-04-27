@@ -84,7 +84,7 @@ img{border:none}
                         <span class="vote-name">No.56</span>
                     </p>
                 </div>
-                <div class="ui-tip tip-left">请选择投票的摄影照片！</div>
+                <div class="ui-tip tip-left">请选择投票的摄影照片</div>
             </div>
             <div class="btn-vote-wraper">
                 <span class="btn-vote">投票</span>
@@ -113,7 +113,7 @@ img{border:none}
         function showError($el, msg) { $(nsTip, $el.parent().addClass(nsErr)).text(msg); $el[0] && $el[0].tagName === 'INPUT' && $el[0].focus(); }
         function removeError($el) {
             if ($el) { $el.parent().removeClass(nsErr) }
-            else { $('.' + nsErr,'.vote-body').removeClass(nsErr) }
+            else { $('.' + nsErr, '.vote-body').removeClass(nsErr) }
         }
         /*  处理验证事件    */
         var handler = function (captchaObj) {
@@ -122,8 +122,16 @@ img{border:none}
             }).onClose(function () {
                 showError($btn, '请完成验证操作');
             }).onSuccess(function () {
+                /* 延迟到动画结束后再alert */
+                var lastUTC = new Date(), duration = 1100;
+                function _alert(msg) {
+                    var elapsed = new Date() - lastUTC;
+                    if (elapsed >= duration) { return alert(msg) }
+                    setTimeout(function () { alert(msg) }, duration - elapsed);
+                }
                 var result = captchaObj.getValidate();
-                if (!result) { return showError($btn, '验证未通过，请重试');}
+                if (!result) { return alert('验证未通过，请重试'); }
+
                 $.ajax({
                     url: 'gt/validate-test',
                     type: 'POST',
@@ -136,13 +144,14 @@ img{border:none}
                     },
                     success: function (data) {
                         if (data.status === 'success') {
-                            alert('感谢您的投票支持');
+                            _alert('感谢您的投票支持');
                         } else if (data.status === 'fail') {
-                            alert('投票失败，请完成验证');
+                            _alert('投票失败，请完成验证');
                             captchaObj.reset();
                         }
                     }
                 });
+
             });
 
             $btn.click(function () {

@@ -123,7 +123,7 @@ img{border:none}
     <script src="libs/gt.js"></script>
     <script>
         $(function ($) {
-        /*  表单元素 和 标签   */
+            /*  表单元素 和 标签   */
             var $form = $('.login-form'),
                 $email = $('input[name=email]', $form),
                 $pwd = $('input[name=pwd]', $form),
@@ -131,77 +131,84 @@ img{border:none}
                 nsTip = '.ui-tip', nsErr = 'error',
                 nsUIChkbox = 'ui-chkbox', nsUIChecked = 'ui-checked';
             $('body').on('click', '.' + nsUIChkbox, function () { $(this).toggleClass(nsUIChecked) });
-        /*  处理验证事件    */
-        var handler = function (captchaObj) {
-            captchaObj.onReady(function () {
-                console.info('geetest has load')
-            }).onClose(function () {
-                showError($btn, '请完成验证') 
-            }).onSuccess(function () {
-                var result = captchaObj.getValidate();
-                if (!result) { return showError($btn,'验证未通过，请重试'); }
-                removeError($btn);
-                $.ajax({
-                    url: 'gt/validate-test',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        email: $email.val(),
-                        pwd: $pwd.val(),
-                        geetest_challenge: result.geetest_challenge,
-                        geetest_validate: result.geetest_validate,
-                        geetest_seccode: result.geetest_seccode
-                    },
-                    success: function (data) {
-                        if (data.status === 'success') {
-                            removeError();
-                            alert('登录成功');
-                        } else if (data.status === 'fail') {
-                            showError($btn,'登录失败，请完成验证 ');
-                            captchaObj.reset();
-                        }
+            /*  处理验证事件    */
+            var handler = function (captchaObj) {
+                captchaObj.onReady(function () {
+                    console.info('geetest has load')
+                }).onClose(function () {
+                    showError($btn, '请完成验证')
+                }).onSuccess(function () {
+                    /* 延迟到动画结束后再alert */
+                    var lastUTC = new Date(), duration = 1100;
+                    function _alert(msg) {
+                        var elapsed = new Date() - lastUTC;
+                        if (elapsed >= duration) { return alert(msg) }
+                        setTimeout(function () { alert(msg) }, duration - elapsed);
                     }
+                    var result = captchaObj.getValidate();
+                    if (!result) { return alert('验证未通过，请重试'); }
+                    removeError($btn);
+                    $.ajax({
+                        url: 'gt/validate-test',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            email: $email.val(),
+                            pwd: $pwd.val(),
+                            geetest_challenge: result.geetest_challenge,
+                            geetest_validate: result.geetest_validate,
+                            geetest_seccode: result.geetest_seccode
+                        },
+                        success: function (data) {
+                            if (data.status === 'success') {
+                                removeError();
+                                _alert('登录成功');
+                            } else if (data.status === 'fail') {
+                                _alert('登录失败，请完成验证 ');
+                                captchaObj.reset();
+                            }
+                        }
+                    });
                 });
+                function showError($el, msg) { $(nsTip, $el.parent().addClass(nsErr)).text(msg); $el[0] && $el[0].tagName === 'INPUT' && $el[0].focus(); }
+                function removeError($el) {
+                    if ($el) { $el.parent().removeClass(nsErr) }
+                    else { $('.' + nsErr, $form).removeClass(nsErr) }
+                }
+                $btn.click(function () {
+                    removeError();
+                    if (!$email.val()) { return showError($email, '请填写正确的用户名') } else { removeError($email) }
+                    if (!$pwd.val()) { return showError($pwd, '请填写密码') } else { removeError($pwd) }
+                    captchaObj.verify();
                 });
-            function showError($el, msg) { $(nsTip, $el.parent().addClass(nsErr)).text(msg); $el[0]&&$el[0].tagName === 'INPUT' && $el[0].focus(); }
-            function removeError($el) {
-                if ($el) { $el.parent().removeClass(nsErr) }
-                else {$('.' + nsErr, $form).removeClass(nsErr)}
-            }
-            $btn.click(function () {
-                removeError();
-                if (!$email.val()) { return showError($email,'请填写正确的用户名') } else { removeError($email) }
-                if (!$pwd.val()) { return showError($pwd, '请填写密码') } else { removeError($pwd) }
-                captchaObj.verify();
+                // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
+            };
+
+
+            $.ajax({
+                url: "gt/register-test?t=" + (new Date()).getTime(), // 加随机数防止缓存
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+
+                    // 调用 initGeetest 进行初始化
+                    // 参数1：配置参数
+                    // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+                    initGeetest({
+                        // 以下 4 个配置参数为必须，不能缺少
+                        gt: data.gt,
+                        challenge: data.challenge,
+                        offline: !data.success, // 表示用户后台检测极验服务器是否宕机
+                        new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
+
+                        product: "bind", // 产品形式，包括：float，popup
+                        width: "300px"
+                        // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+                    }, handler);
+                }
             });
-            // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
-        };
 
-
-        $.ajax({
-            url: "gt/register-test?t=" + (new Date()).getTime(), // 加随机数防止缓存
-            type: "get",
-            dataType: "json",
-            success: function (data) {
-
-                // 调用 initGeetest 进行初始化
-                // 参数1：配置参数
-                // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
-                initGeetest({
-                    // 以下 4 个配置参数为必须，不能缺少
-                    gt: data.gt,
-                    challenge: data.challenge,
-                    offline: !data.success, // 表示用户后台检测极验服务器是否宕机
-                    new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
-
-                    product: "bind", // 产品形式，包括：float，popup
-                    width: "300px"
-                    // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
-                }, handler);
-            }
         });
-
-    });
     </script>
 </body>
 </html>
