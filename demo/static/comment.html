@@ -84,7 +84,7 @@ body { margin: 0; text-align: center; font-size:14px;font-family:"PingFangSC-Reg
 <!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
 <script src="libs/gt.js"></script>
 <script>
-    function showError($el, msg) { $('.ui-tip', $el.parent().addClass('error')).text(msg); $el[0] && $el[0].tagName === 'INPUT' && $el[0].focus(); }
+    function showError($el, msg) { $('.ui-tip', $el.parent().addClass('error')).text(msg);}
     function hideError($el) {
         if ($el) { $el.parent().removeClass('error') }
         else { $('.error', '.c-box').removeClass('error') }

@@ -110,7 +110,7 @@ img{border:none}
             t.toggleClass(act);
             voteid = t.hasClass(act) ? t.attr('data-vid') : '';
         });
-        function showError($el, msg) { $(nsTip, $el.parent().addClass(nsErr)).text(msg); $el[0] && $el[0].tagName === 'INPUT' && $el[0].focus(); }
+        function showError($el, msg) { $(nsTip, $el.parent().addClass(nsErr)).text(msg);}
         function removeError($el) {
             if ($el) { $el.parent().removeClass(nsErr) }
             else { $('.' + nsErr, '.vote-body').removeClass(nsErr) }
