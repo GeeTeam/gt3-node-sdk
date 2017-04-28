@@ -72,6 +72,13 @@
         <input class="inp" id="password" type="password" value="123456">
     </div>
     <br>
+    <div>
+        <label>完成验证：</label>
+        <div id="captcha">
+            <p id="wait" class="show">正在加载验证码......</p>
+        </div>
+    </div>
+    <br>
     <div id="btn" class="btn">提交</div>
 </form>
 
@@ -81,9 +88,11 @@
 <script src="libs/gt.js"></script>
 <script>
     var handler = function (captchaObj) {
+        captchaObj.appendTo('#captcha');
         captchaObj.onReady(function () {
             $("#wait").hide();
-        }).onSuccess(function () {
+        });
+        $('#btn').click(function () {
             var result = captchaObj.getValidate();
             if (!result) {
                 return alert('请完成验证');
@@ -101,20 +110,13 @@
                 },
                 success: function (data) {
                     if (data.status === 'success') {
-                        setTimeout(function () {
-                            alert('登录成功');
-                        }, 1500);
+                        alert('登录成功');
                     } else if (data.status === 'fail') {
-                        setTimeout(function () {
-                            alert('登录失败，请完成验证');
-                            captchaObj.reset();
-                        }, 1500);
+                        alert('登录失败，请完成验证');
+                        captchaObj.reset();
                     }
                 }
             });
-        });
-        $('#btn').click(function () {
-            captchaObj.verify();
         })
         // 更多前端接口说明请参见：http://docs.geetest.com/install/client/web-front/
     };
@@ -134,8 +136,8 @@
                 challenge: data.challenge,
                 offline: !data.success, // 表示用户后台检测极验服务器是否宕机
                 new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
-                timeout: '500',
-                product: "bind", // 产品形式，包括：float，popup
+
+                product: "float", // 产品形式，包括：float，popup
                 width: "300px"
                 // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);

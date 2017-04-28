@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>大图模式</title>
+    <title>滑动模式</title>
     <style>
         body {
             margin: 50px 0;
@@ -55,12 +55,11 @@
             color: #666;
             margin: 0;
         }
-
     </style>
 </head>
 <body>
 <h2><a href="./">返回</a></h2>
-<h1>大图模式</h1>
+<h1>滑动模式</h1>
 <form id="form">
     <div>
         <label for="username">用户名：</label>
@@ -72,6 +71,13 @@
         <input class="inp" id="password" type="password" value="123456">
     </div>
     <br>
+    <div>
+        <label>完成验证：</label>
+        <div id="captcha">
+            <p id="wait" class="show">正在加载验证码......</p>
+        </div>
+    </div>
+    <br>
     <div id="btn" class="btn">提交</div>
 </form>
 
@@ -81,15 +87,17 @@
 <script src="libs/gt.js"></script>
 <script>
     var handler = function (captchaObj) {
+        captchaObj.appendTo('#captcha');
         captchaObj.onReady(function () {
             $("#wait").hide();
-        }).onSuccess(function () {
+        });
+        $('#btn').click(function () {
             var result = captchaObj.getValidate();
             if (!result) {
                 return alert('请完成验证');
             }
             $.ajax({
-                url: 'gt/validate-click',
+                url: 'gt/validate-slide',
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -101,26 +109,21 @@
                 },
                 success: function (data) {
                     if (data.status === 'success') {
-                        setTimeout(function () {
-                            alert('登录成功');
-                        }, 1500);
+                        alert('登录成功');
                     } else if (data.status === 'fail') {
-                        setTimeout(function () {
-                            alert('登录失败，请完成验证');
-                            captchaObj.reset();
-                        }, 1500);
+                        alert('登录失败，请完成验证');
+                        captchaObj.reset();
                     }
                 }
             });
-        });
-        $('#btn').click(function () {
-            captchaObj.verify();
         })
-        // 更多前端接口说明请参见：http://docs.geetest.com/install/client/web-front/
+        // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
+        window.gt = captchaObj;
     };
 
+
     $.ajax({
-        url: "gt/register-click?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        url: "gt/register-slide?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
         dataType: "json",
         success: function (data) {
@@ -134,10 +137,10 @@
                 challenge: data.challenge,
                 offline: !data.success, // 表示用户后台检测极验服务器是否宕机
                 new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
-                timeout: '500',
-                product: "bind", // 产品形式，包括：float，popup
+
+                product: "float", // 产品形式，包括：float，popup
                 width: "300px"
-                // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+                // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         }
     });
