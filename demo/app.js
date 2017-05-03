@@ -260,6 +260,35 @@ app.post("/gt/validate-test", function (req, res) {
     });
 });
 
+var jsonfile = require('jsonfile');
+var uas = require('../ua-list.json');
+app.get('/get-user-agent', function (req, res) {
+    var ua = req.headers['user-agent'];
+    if (uas.indexOf(ua) === -1) {
+        uas.unshift(ua);
+        jsonfile.writeFile('./ua-list.json', uas, {spaces: 2}, function(err) {
+            if (err) {
+                console.error(err)
+            }
+        });
+    }
+    res.send(`
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" conent="width=device-width">
+<style>
+li { font-family: Optima; padding: 10px 0; }
+</style>
+</head>
+<body>
+<ul>
+${uas.map((ua) => `<li>${ua}</li>`).join('')}
+</ul>
+</body>
+`);
+});
+
 var port = 9977;
 app.listen(port, function () {
     console.log('listening at http://localhost:' + port)
