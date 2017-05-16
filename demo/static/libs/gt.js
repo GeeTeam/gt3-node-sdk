@@ -226,6 +226,7 @@
         return !!window.Geetest;
     };
     if (detect()) {
+        status.fullpage = "loaded";
         status.slide = "loaded";
     }
     var initGeetest = function (userConfig, callback) {
@@ -242,7 +243,7 @@
                 callback(new window.Geetest(config));
             };
             callbacks[type] = callbacks[type] || [];
-            var s = status[type] || 'init';
+            var s = status[type] || 'init';           
             if (s === 'init') {
                 status[type] = 'loading';
                 callbacks[type].push(init);
