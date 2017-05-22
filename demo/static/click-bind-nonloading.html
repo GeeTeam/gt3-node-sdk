@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>大图模式</title>
+    <title>大图模式-自定义loading</title>
     <style>
         body {
             margin: 50px 0;
@@ -55,12 +55,25 @@
             color: #666;
             margin: 0;
         }
-
+        #js_loading {
+            top:0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            text-align: center;
+            font-size: 24px;
+            background-color: black;
+            color: white;
+            opacity: 0.5;
+        }
+        #js_loading .loading{
+            margin-top: 50%;
+        }
     </style>
 </head>
 <body>
-<h2><a href="./">返回</a></h2>
-<h1>大图模式</h1>
+<h1>大图自定义loading模式</h1>
 <form id="form">
     <div>
         <label for="username">用户名：</label>
@@ -74,6 +87,7 @@
     <br>
     <div id="btn" class="btn">提交</div>
 </form>
+<div id="js_loading" style="display: none;"><p class="loading">LOADING...</p></div>
 
 <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
 <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
@@ -84,6 +98,7 @@
         captchaObj.onReady(function () {
             $("#wait").hide();
         }).onSuccess(function () {
+            hideLoading()
             var result = captchaObj.getValidate();
             if (!result) {
                 return alert('请完成验证');
@@ -112,8 +127,14 @@
                     }
                 }
             });
+        }).onNextReady(function(){            
+            hideLoading();
+        }).onError(function(err){
+            hideLoading()
+            console.log(err)
         });
         $('#btn').click(function () {
+            showLoading();
             captchaObj.verify();
         })
         // 更多前端接口说明请参见：http://docs.geetest.com/install/client/web-front/
@@ -134,13 +155,22 @@
                 challenge: data.challenge,
                 offline: !data.success, // 表示用户后台检测极验服务器是否宕机
                 new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
-                timeout: '5000',
+                timeout: 5000,
+                hide_next_loading: true,
                 product: "bind", // 产品形式，包括：float，popup
-                width: "300px"
+                width: "300px",
+                pure: 1, // 1 表示纯净版无loading, 0 表示有loading
                 // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         }
     });
+
+    function showLoading(){
+        $('#js_loading').show();
+    }
+    function hideLoading(){
+        $('#js_loading').hide();
+    }
 </script>
 </body>
 </html>
