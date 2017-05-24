@@ -7,7 +7,6 @@
     <style>
 body { margin: 0; padding: 0
 text-align:center; font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif; }
-
 img{border:none}
 .hide{display:none}
 .main-body{width: 1100px;margin:20px auto;font-size:14px;}
@@ -15,83 +14,134 @@ img{border:none}
 .main-body input,.main-body textarea{font-size:14px}
 .nav-bar{padding-top: 15px; padding-left: 10px;height: 40px;background: #56616c; color:#eee; text-align: left;}
 .h-tip{padding:33px 0 30px;text-align:center;}
-
-
 .page-content{padding-bottom:320px;background:#f6f6f6}
 .login-body{width:420px;margin:20px auto;background:#fff;border-radius:3px;color:#999;text-align:left;box-shadow:0 0 12px 0 rgba(51, 51, 51, 0.4)}
 .login-inner{width:260px;margin:0 auto}
 .login-h2{padding:52px 0 40px;text-align:center;letter-spacing:3px;color:#111;font-size:22px}
-
-
 .input-row{position:relative;padding:12px 0 12px 34px;color:#a0aab0;border:1px solid #d1d1d1;background:#f4f4f4;border-radius:2px}
 .input-row input{display:block;width:92%;background:inherit;border:none;outline:none}
 .input-row input:-webkit-autofill{-webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 1000px white inset;}
-
 .input-icon{position:absolute;left:12px;width:14px;height:14px;margin-top:1px;background-repeat:no-repeat;background-position:center}
 .email-row .input-icon{background-image:url(image/USER.png)}
 .password-row .input-icon{background-image:url(image/LOCK.png)}
-
 .password-row{margin-top:6px}
 .tool-row{margin:10px 0;clear:both;font-size:14px}
 .forget-pwd{float:right;color:inherit;text-decoration:none}
 .login-btn-row{position:relative;text-align:center}
-.btn-login{height:44px;line-height:44px;letter-spacing:3px;color:#fff;background:#13a9ff;cursor:pointer}
+.btn-login{height:44px;line-height:44px;color:#fff;background:#13a9ff;cursor:pointer;border-radius: 2px;}
+.btn-login:hover { background: #049af0; }
 .btn-login.error { background:#dbdbdb; }
 /*  ui模拟checkbox  */
 .ui-chkbox{position:relative;padding-left:18px;cursor:pointer}
 .ui-chkbox:before{position:absolute;content:'';top:50%;left:2px;margin-top:-6px;display:block;width:10px;height:9px;border:1px solid #ccc}
 .ui-chkbox.ui-checked:before{background:url(/image/勾选.png) no-repeat}
-
 .side-login{margin-top:48px;text-align:center}
 .side-head{position:relative}
 .side-head-fake{position:relative;display:inline-block;padding:0 12px;visibility:hidden;}
 .side-head-txt{position:absolute;visibility:visible;top:0;left:0;width:100%;margin:0;background:#fff;color:#999;text-align:center;z-index:9}
 .side-head-line{position:absolute;top:50%;left:0;/*margin-top:1px;*/width:100%;height:1px;background:#ccc;}
-
 .side-loign-list{font-size:0;padding:16px 0 59px}
 .side-login-type{display:inline-block;width:50px;height:50px;margin-left:20px;background-repeat:no-repeat}
 .loginby-weibo{background-image:url(image/微博.png)}
 .loginby-wechat{background-image:url(image/微信.png)}
 .loginby-qq{background-image:url(image/qq.png)}
-
 .inp { border: 1px solid #cccccc; border-radius: 2px; padding: 0 10px; width: 278px; height: 40px; font-size: 18px; }
-.btn { display: inline-block; box-sizing: border-box; border: 1px solid #cccccc; border-radius: 2px; width: 100px; height: 40px; line-height: 40px; font-size: 16px; color: #666; cursor: pointer; background: white linear-gradient(180deg, #ffffff 0%, #f3f3f3 100%); }
-.btn:hover { background: white linear-gradient(0deg, #ffffff 0%, #f3f3f3 100%) }
 #captcha { width: 300px; display: inline-block; }
 label { vertical-align: top; display: inline-block; width: 80px; text-align: right; }
 #wait { text-align: left; color: #666; margin: 0; }
+@-webkit-keyframes spin{
+    0%{transform:rotate(0deg);-webkit-transform:rotate(0deg);}
+    100%{transform:rotate(360deg);-webkit-transform:rotate(360deg);}
+}
+@keyframes spin{
+    0%{transform:rotate(0deg);-webkit-transform:rotate(0deg);}
+    100%{transform:rotate(360deg);-webkit-transform:rotate(360deg);}
+}
+@-webkit-keyframes rotator{
+    0%{transform:rotate(0deg);-webkit-transform:rotate(0deg);}
+    100%{transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+}
+@keyframes rotator{
+    0%{transform:rotate(0deg);-webkit-transform:rotate(0deg);}
+    100%{transform:rotate(270deg);-webkit-transform:rotate(270deg);}
+}
+@keyframes dash{
+    0%{stroke-dashoffset:72;}
+    50%{stroke-dashoffset:18;transform:rotate(135deg);}
+    100%{stroke-dashoffset:72;transform:rotate(450deg);}
+}
+.spinner{animation:rotator 1.4s linear infinite;}
+.path{stroke-dasharray:72;stroke-dashoffset:0;transform-origin:center;animation:dash 1.4s ease-in-out infinite;}
+.loading{width:24px;height:24px;position:absolute;left:10px;top:8px;display:none}
+.success{position:absolute;top:9px;left:7px;border-radius:50%;width:24px;height:24px;display:none;}
+.success *{box-sizing:border-box;}
+.geetest_success_show{position:relative;left:0;top:0;width:24px;height:24px;background-color:#13a9ff;display:none \9}
+.success .geetest_success_show .geetest_success_pie{position:absolute;left:50%;top:0;border:2px solid #ffffff;border-left:none;border-radius:0 100% 100% 0 / 0 50% 50% 0;width:50%;height:100%;-moz-transform:rotate(25deg);-ms-transform:rotate(25deg);-webkit-transform:rotate(25deg);transform:rotate(25deg);-moz-transform-origin:0 50%;-ms-transform-origin:0 50%;-webkit-transform-origin:0 50%;transform-origin:0 50%}
+.success .geetest_success_show .geetest_success_filter{position:absolute;left:0;top:0;border:2px solid #ffffff;border-right:none;border-radius:100% 0 0 100% / 50% 0 0 50%;width:50%;height:100%;-moz-transform:rotate(25deg);-ms-transform:rotate(25deg);-webkit-transform:rotate(25deg);transform:rotate(25deg);-moz-transform-origin:100% 50%;-ms-transform-origin:100% 50%;-webkit-transform-origin:100% 50%;transform-origin:100% 50%;opacity:0}
+.success .geetest_success_show .geetest_success_mask{border:none;border-radius:0;background-color:#13a9ff;position:absolute;left:50%;top:0;width:50%;height:100%;-moz-transform:rotate(25deg);-ms-transform:rotate(25deg);-webkit-transform:rotate(25deg);transform:rotate(25deg);-moz-transform-origin:0 50%;-ms-transform-origin:0 50%;-webkit-transform-origin:0 50%;transform-origin:0 50%}
+.success .geetest_success_correct{position:absolute;right:-4px;top:-4px;border-radius:50%;width:28px;height:28px;overflow:hidden;-moz-transform:translate3d(0,0,0);-ms-transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}
+.success .geetest_success_correct .geetest_success_icon{position:absolute;top:6px;right:6px;width:18px;height:18px;-moz-transform:translate(-28px,28px);-ms-transform:translate(-28px,28px);-webkit-transform:translate(-28px,28px);transform:translate(-28px,28px);}
+.geetest_success_animate .geetest_success_icon{-moz-animation:geetest_success_correct 0.7s ease both;-webkit-animation:geetest_success_correct 0.7s ease both;animation:geetest_success_correct 0.7s ease both}
+.geetest_success_icon:after{content:"";position:absolute;left:0;right:0;width:8px;height:16px;border-bottom:3px solid white;border-right:3px solid white;transform:rotate(45deg) translateY(-4px);}
 
-@-webkit-keyframes spin {
-    0% { transform: rotate(0deg); -webkit-transform: rotate(0deg); }
-    100% { transform: rotate(360deg); -webkite-transform: rotate(360deg); }
+@keyframes geetest_success_correct{
+    0%{-moz-transform:translate(-28px,28px);-ms-transform:translate(-28px,28px);-webkit-transform:translate(-28px,28px);transform:translate(-28px,28px)}
+    30%{-moz-transform:translate(-28px,28px);-ms-transform:translate(-28px,28px);-webkit-transform:translate(-28px,28px);transform:translate(-28px,28px)}
+    90%{-moz-transform:translate(3px,-2px);-ms-transform:translate(3px,-2px);-webkit-transform:translate(3px,-2px);transform:translate(3px,-2px)}
+    100%{-moz-transform:translate(1px,0);-ms-transform:translate(1px,0);-webkit-transform:translate(1px,0);transform:translate(1px,0)}
 }
-@keyframes spin {
-    0% { transform: rotate(0deg); -webkit-transform: rotate(0deg); }
-    100% { transform: rotate(360deg); -webkite-transform: rotate(360deg); }
+@-webkit-keyframes geetest_success_correct{
+    0%{-moz-transform:translate(-28px,28px);-ms-transform:translate(-28px,28px);-webkit-transform:translate(-28px,28px);transform:translate(-28px,28px)}
+    30%{-moz-transform:translate(-28px,28px);-ms-transform:translate(-28px,28px);-webkit-transform:translate(-28px,28px);transform:translate(-28px,28px)}
+    90%{-moz-transform:translate(3px,-2px);-ms-transform:translate(3px,-2px);-webkit-transform:translate(3px,-2px);transform:translate(3px,-2px)}
+    100%{-moz-transform:translate(1px,0);-ms-transform:translate(1px,0);-webkit-transform:translate(1px,0);transform:translate(1px,0)}
 }
-.loading { width: 24px; height: 24px; margin-left: 10px; margin-top: 8px; border: 2px solid transparent; border-top-color: white; border-left-color: white; border-bottom-color: white; border-radius: 50%; position: absolute; left: 0; animation: spin 0.8s linear infinite; display: none; }
-.success { width: 24px; height: 24px; left: 7px; top: 9px; border-radius: 50%; position: absolute; display: none;}
-.success_tick { position: absolute; left: 0; top: 0; height: 16px; width: 8px; border: 3px solid; border-right: none; border-bottom: none; transform: rotate(-135deg) translate(-5px, 5px) }
-.success_show { position: relative; width: 24px; height: 24px; top: 0; left: 0; }
-.success_pie { position: absolute; left: 50%; top: 0; border: 2px solid #ffffff; border-left: none; border-radius: 0 100% 100% 0 / 0 50% 50% 0; width: 10px; height: 20px; -moz-transform: rotate(25deg); -ms-transform: rotate(25deg); -webkit-transform: rotate(25deg); transform: rotate(25deg); -moz-transform-origin: 0 50%; -ms-transform-origin: 0 50%; -webkit-transform-origin: 0 50%; transform-origin: 0 50%; opacity: 0 }
-@keyframes success_pie {
-    0% { -moz-transform: rotate(25deg); -ms-transform: rotate(25deg); -webkit-transform: rotate(25deg); transform: rotate(25deg); opacity: 0 };
-    25% { -moz-transform: rotate(25deg); -ms-transform: rotate(25deg); -webkit-transform: rotate(25deg); transform: rotate(25deg); opacity: 1; }
-    100% { -moz-transform: rotate(-275deg); -ms-transform: rotate(-275deg); -webkit-transform: rotate(-275deg); transform: rotate(-275deg) ; opacity: 1}
-}
-.success_filter { position: absolute; left: 0; top: 0; border: 2px solid #ffffff; border-right: none; border-radius: 100% 0 0 100% / 50% 0 0 50%; width: 10px; height: 20px; -moz-transform: rotate(25deg); -ms-transform: rotate(25deg); -webkit-transform: rotate(25deg); transform: rotate(25deg); -moz-transform-origin: 100% 50%; -ms-transform-origin: 100% 50%; -webkit-transform-origin: 100% 50%; transform-origin: 100% 50%; opacity: 0 }
-@keyframes success_filter {
-    50.9% { opacity: 0 }
-    51% { opacity: 1 }
-    100% { opacity: 1 }
-}
-.success_mask { border: none; border-radius: 0; background-color: #EEFFF5; position: absolute; left: 50%; top: 0; width: 50%; height: 100%; -moz-transform: rotate(25deg); -ms-transform: rotate(25deg); -webkit-transform: rotate(25deg); transform: rotate(25deg); -moz-transform-origin: 0 50%; -ms-transform-origin: 0 50%; -webkit-transform-origin: 0 50%; transform-origin: 0 50% }
-.success_animate .success_pie { -moz-animation: success_pie 0.7s ease both; -webkit-animation: success_pie 0.7s ease both; animation: success_pie 0.7s ease both }
-.success_animate .success_filter { -moz-animation: success_filter 0.7s linear both; -webkit-animation: success_filter 0.7s linear both; animation: success_filter 0.7s linear both }
 
+.geetest_success_animate .geetest_success_pie {
+    -moz-animation: geetest_success_pie 0.7s ease both;
+    -webkit-animation: geetest_success_pie 0.7s ease both;
+    animation: geetest_success_pie 0.7s ease both
+}
+@keyframes geetest_success_pie{
+    25%{-moz-transform:rotate(25deg);-ms-transform:rotate(25deg);-webkit-transform:rotate(25deg);transform:rotate(25deg)}
+    100%{-moz-transform:rotate(-275deg);-ms-transform:rotate(-275deg);-webkit-transform:rotate(-275deg);transform:rotate(-275deg)}
+}
+@-webkit-keyframes geetest_success_pie{
+    25%{-moz-transform:rotate(25deg);-ms-transform:rotate(25deg);-webkit-transform:rotate(25deg);transform:rotate(25deg)}
+    100%{-moz-transform:rotate(-275deg);-ms-transform:rotate(-275deg);-webkit-transform:rotate(-275deg);transform:rotate(-275deg)}
+}
+.geetest_success_animate .geetest_success_mask {
+    -moz-animation: geetest_success_mask 0.7s linear both;
+    -webkit-animation: geetest_success_mask 0.7s linear both;
+    animation: geetest_success_mask 0.7s linear both
+}
+@keyframes geetest_success_mask{
+    50.9%{opacity:1}
+    51%{opacity:0}
+    100%{opacity:0}
+}
+@-webkit-keyframes geetest_success_mask{
+    50.9%{opacity:1}
+    51%{opacity:0}
+    100%{opacity:0}
+}
+.geetest_success_animate .geetest_success_filter {
+    -moz-animation: geetest_success_filter 0.7s linear both;
+    -webkit-animation: geetest_success_filter 0.7s linear both;
+    animation: geetest_success_filter 0.7s linear both
+}
+@keyframes geetest_success_filter{
+    50.9%{opacity:0}
+    51%{opacity:1}
+    100%{opacity:1}
+}
+@-webkit-keyframes geetest_success_filter{
+    50.9%{opacity:0}
+    51%{opacity:1}
+    100%{opacity:1}
+}
 .erroricon { position: absolute; left: 13px; top: 13px; width: 18px; height: 18px; background: #ee6954; border-radius: 50%; }
 .erroricon .error-line { position: absolute; left: 5px; top: 8px; width: 8px; height: 2px; background: #ffffff; }
-
 </style>
 </head>
 <body>
@@ -117,14 +167,21 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
                             <a href="#" class="forget-pwd">忘记密码?</a>
                         </div>
                         <div class="login-btn-row">                            
-                            <div id="btn" class="btn-login">
-                                <span class="loading"></span>
-                                <span class="success">
-                                    <div class="success_show">
-                                        <div class="success_pie"></div>
-                                        <div class="success_filter"></div>                                        
+                            <div id="btn" class="btn-login">                                
+                                <span class="loading">
+                                    <svg class="js_loading spinner" width="24px" height="24px">
+                                       <circle class="path" fill="none" stroke="white" stroke-width="2"  stroke-linecap="round"  cx="12" cy="12" r="10"></circle>
+                                    </svg>
+                                </span>
+                                <span class="success">                                    
+                                    <div class="geetest_success_show">
+                                        <div class="geetest_success_pie"></div>
+                                        <div class="geetest_success_filter"></div>
+                                        <div class="geetest_success_mask"></div>
                                     </div>
-                                    <div class="success_tick"></div>
+                                    <div class="geetest_success_correct">
+                                        <div class="geetest_success_icon"></div>
+                                    </div>
                                 </span>                                
                                 <span class="js_txt">登录</span>
                             </div>
@@ -229,7 +286,6 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
                 offline: !data.success, // 表示用户后台检测极验服务器是否宕机
                 new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
                 timeout: 5000,
-                hide_next_loading: true,
                 product: "bind", // 产品形式，包括：float，popup
                 width: "300px",
                 pure: 1, // 1 表示纯净版无loading, 0 表示有loading
@@ -248,13 +304,13 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
     }
     function validateSuccess(){
         $('#btn .loading').hide();
-        $('#btn .success').addClass('success_animate');
+        $('#btn .success').addClass('geetest_success_animate');
         $('#btn .success').show();
         $('#btn .js_txt').text("验证成功，跳转中")
     }
     function resetBtn(){
         $('#btn .loading').hide();
-        $('#btn .success').removeClass('success_animate');
+        $('#btn .success').removeClass('geetest_success_animate');
         $('#btn .success').hide();
         $('#btn .js_txt').text("登录")
     }
