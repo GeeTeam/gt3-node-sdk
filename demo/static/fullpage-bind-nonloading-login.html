@@ -91,31 +91,8 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
 .success .geetest_success_show .geetest_success_filter{position:absolute;left:0;top:0;border:2px solid #ffffff;border-right:none;border-radius:100% 0 0 100% / 50% 0 0 50%;width:50%;height:100%;-moz-transform:rotate(25deg);-ms-transform:rotate(25deg);-webkit-transform:rotate(25deg);transform:rotate(25deg);-moz-transform-origin:100% 50%;-ms-transform-origin:100% 50%;-webkit-transform-origin:100% 50%;transform-origin:100% 50%;opacity:0}
 .success .geetest_success_show .geetest_success_mask{border:none;border-radius:0;background-color:#13a9ff;position:absolute;left:50%;top:0;width:50%;height:100%;-moz-transform:rotate(25deg);-ms-transform:rotate(25deg);-webkit-transform:rotate(25deg);transform:rotate(25deg);-moz-transform-origin:0 50%;-ms-transform-origin:0 50%;-webkit-transform-origin:0 50%;transform-origin:0 50%}
 .success .geetest_success_correct{position:absolute;right:-4px;top:-4px;border-radius:50%;width:28px;height:28px;overflow:hidden;-moz-transform:translate3d(0,0,0);-ms-transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}
-.success .geetest_success_correct .geetest_success_icon {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 18px;
-    height: 18px;
-    -moz-transform: translate(-28px, 28px);
-    -ms-transform: translate(-28px, 28px);
-    -webkit-transform: translate(-28px, 28px);
-    transform: translate(-28px, 28px);
-}
+.success .geetest_success_correct .geetest_success_icon{position:absolute;top:6px;right:6px;width:18px;height:18px;-moz-transform:translate(-28px,28px);-ms-transform:translate(-28px,28px);-webkit-transform:translate(-28px,28px);transform:translate(-28px,28px);background-image:url(image/白色勾.png);background-repeat:no-repeat;background-position-y:3px;}
 .geetest_success_animate .geetest_success_icon{-moz-animation:geetest_success_correct 0.7s ease both;-webkit-animation:geetest_success_correct 0.7s ease both;animation:geetest_success_correct 0.7s ease both}
-
-.geetest_success_icon:after{
-    content:"";
-    position: absolute;
-    left: 0;
-    right: 0;
-    width: 8px;
-    height: 16px;
-    border-bottom: 3px solid white;
-    border-right: 3px solid white;
-    transform: rotate(45deg) translateY(-4px);
-}
-
 @keyframes geetest_success_correct{
     0%{-moz-transform:translate(-28px,28px);-ms-transform:translate(-28px,28px);-webkit-transform:translate(-28px,28px);transform:translate(-28px,28px)}
     30%{-moz-transform:translate(-28px,28px);-ms-transform:translate(-28px,28px);-webkit-transform:translate(-28px,28px);transform:translate(-28px,28px)}
