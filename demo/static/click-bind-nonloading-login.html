@@ -239,6 +239,7 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
                     if (data.status === 'success') {
                         setTimeout(function () {
                             alert('登录成功');
+                            window.location.reload();
                         }, 1500);
                     } else if (data.status === 'fail') {
                         setTimeout(function () {
