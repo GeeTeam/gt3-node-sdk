@@ -149,7 +149,7 @@ img{border:none}
                     if (!result) { return alert('验证未通过，请重试'); }
                     removeError($btn);
                     $.ajax({
-                        url: 'gt/validate-test',
+                        url: 'gt/validate-userdemo',
                         type: 'POST',
                         dataType: 'json',
                         data: {
@@ -186,7 +186,7 @@ img{border:none}
 
 
             $.ajax({
-                url: "gt/register-test?t=" + (new Date()).getTime(), // 加随机数防止缓存
+                url: "gt/register-userdemo?t=" + (new Date()).getTime(), // 加随机数防止缓存
                 type: "get",
                 dataType: "json",
                 success: function (data) {

@@ -101,7 +101,7 @@ li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 
             var result = captchaObj.getValidate();
             if (!result) {return alert('请完成验证');}
             $.ajax({
-                url: 'gt/validate-click',
+                url: 'gt/validate-userdemo',
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -132,7 +132,7 @@ li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 
     };
 
     $.ajax({
-        url: "gt/register-click?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        url: "gt/register-userdemo?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
         dataType: "json",
         success: function (data) {
