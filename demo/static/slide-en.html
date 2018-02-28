@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>滑动模式</title>
+    <title>Sliding mode</title>
     <style>
         body {
             margin: 50px 0;
@@ -46,7 +46,7 @@
         label {
             vertical-align: top;
             display: inline-block;
-            width: 80px;
+            width: 180px;
             text-align: right;
         }
 
@@ -58,27 +58,27 @@
     </style>
 </head>
 <body>
-<h2><a href="./">返回</a></h2>
-<h1>滑动模式</h1>
+<h2><a href="./">BACK</a></h2>
+<h1>Sliding mode</h1>
 <form id="form">
     <div>
-        <label for="username">用户名：</label>
-        <input class="inp" id="username" type="text" value="用户名">
+        <label for="username">username：</label>
+        <input class="inp" id="username" type="text" value="username">
     </div>
     <br>
     <div>
-        <label for="password">密码：</label>
+        <label for="password">password：</label>
         <input class="inp" id="password" type="password" value="123456">
     </div>
     <br>
     <div>
-        <label>完成验证：</label>
+        <label>Complete verification：</label>
         <div id="captcha">
-            <p id="wait" class="show">正在加载验证码......</p>
+            <p id="wait" class="show">Load......</p>
         </div>
     </div>
     <br>
-    <div id="btn" class="btn">提交</div>
+    <div id="btn" class="btn">Submit</div>
 </form>
 
 <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
@@ -94,7 +94,7 @@
         $('#btn').click(function () {
             var result = captchaObj.getValidate();
             if (!result) {
-                return alert('请完成验证');
+                return alert('Please complete verification');
             }
             $.ajax({
                 url: 'gt/validate-slide',
@@ -109,9 +109,9 @@
                 },
                 success: function (data) {
                     if (data.status === 'success') {
-                        alert('登录成功');
+                        alert('success');
                     } else if (data.status === 'fail') {
-                        alert('登录失败，请完成验证');
+                        alert('fail, Please complete verification');
                         captchaObj.reset();
                     }
                 }
