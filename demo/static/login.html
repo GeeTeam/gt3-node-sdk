@@ -131,10 +131,22 @@ img{border:none}
                 nsTip = '.ui-tip', nsErr = 'error',
                 nsUIChkbox = 'ui-chkbox', nsUIChecked = 'ui-checked';
             $('body').on('click', '.' + nsUIChkbox, function () { $(this).toggleClass(nsUIChecked) });
+            function showError($el, msg) { $(nsTip, $el.parent().addClass(nsErr)).text(msg);}
             /*  处理验证事件    */
             var handler = function (captchaObj) {
                 captchaObj.onReady(function () {
                     console.info('geetest has load')
+                }).validate(function(){
+                    if (!$email.val()) { return showError($email, '请填写正确的用户名') } else { removeError($email) }
+                    if (!$pwd.val()) { return showError($pwd, '请填写密码') } else { removeError($pwd) }
+                    return true;
+                }).setInfos(function(){
+                    return {
+                        "username": $email.val(),
+                        "nikename": "昵称",
+                        "email": $email.val(),
+                        "phone": "手机号"
+                    }
                 }).onClose(function () {
                     showError($btn, '请完成验证')
                 }).onSuccess(function () {
@@ -169,22 +181,17 @@ img{border:none}
                             }
                         }
                     });
-                });
-                function showError($el, msg) { $(nsTip, $el.parent().addClass(nsErr)).text(msg);}
+                });                
                 function removeError($el) {
                     if ($el) { $el.parent().removeClass(nsErr) }
                     else { $('.' + nsErr, $form).removeClass(nsErr) }
                 }
                 $btn.click(function () {
-                    removeError();
-                    if (!$email.val()) { return showError($email, '请填写正确的用户名') } else { removeError($email) }
-                    if (!$pwd.val()) { return showError($pwd, '请填写密码') } else { removeError($pwd) }
+                    removeError();                    
                     captchaObj.verify();
                 });
                 // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
             };
-
-
             $.ajax({
                 url: "gt/register-userdemo?t=" + (new Date()).getTime(), // 加随机数防止缓存
                 type: "get",
