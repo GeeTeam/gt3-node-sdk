@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>onepass demo</title>
+    <style>
+body { margin: 50px 0; text-align: center; font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif; }
+.inp { border: 1px solid #cccccc; border-radius: 2px; padding: 0 10px; width: 278px; height: 40px; font-size: 14px; }
+.btn { display: inline-block; box-sizing: border-box; border: 1px solid #cccccc; border-radius: 2px; width: 120px; height: 40px; line-height: 40px; font-size: 16px; color: #666; cursor: pointer; background: white linear-gradient(180deg, #ffffff 0%, #f3f3f3 100%); }
+.btn:hover { background: white linear-gradient(0deg, #ffffff 0%, #f3f3f3 100%) }
+#captcha { width: 300px; display: inline-block; }
+label { vertical-align: top; display: inline-block; width: 80px; text-align: right; }
+#wait { text-align: left; color: #666; margin: 0; }
+.txt_msg { width: 130px; }
+.btn_msg { border: solid 1px #cccccc; border-radius: 2px; height: 44px; background: #0BD8D0; width: 122px; margin:0; color:#fff; font-size: 14px; -webkit-appearance: none;}
+.btn_msg.disable { background:#cccccc; }
+#loading {position: fixed;left: 0; top: 0; height: 100%; width: 100%; opacity: 0.6; background: #000;}
+#loading img { width: 30px; margin: 50%; position: relative;}
+#btnStep1, #btnStep2 { background: #0BD8D0; color:#ffffff; }
+    </style>
+</head>
+<body>
+<h1>注册</h1>
+<div id="step1">
+    <h5 style="color:red;">请先关闭WIFI</h5>
+    <div>
+        <input id="phone" type="tel" class="inp" maxlength="11" placeholder="请输入手机号">        
+    </div>
+    <br/>
+    <div id="btnStep1" class="btn">下一步</div>
+</div>
+<div id="step2" style="display: none;">
+    <div>
+        <input id="txtmsg" type="tel" class="inp txt_msg" maxlength="6" placeholder="请输入短信验证码">
+        <input type="button" class="btn_msg" id="btnGetMessage" value="获取验证码">
+    </div>
+    <br/>
+    <div id="btnStep2" class="btn">下一步</div>
+</div>
+<div id="step3" style="display: none;">
+    <h3>注册成功</h3>
+</div>
+<div id="loading" style="display: none;">
+    <img src="img/loading.gif" />
+</div>
+
+<!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
+<script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+<script src="http://static.geetest.com/static/tools/gt.js"></script>
+<script src="libs/onepass.js"></script>
+<script type="text/javascript">
+    var step1Div = $('#step1');
+    var step2Div = $('#step2');
+    var step3Div = $('#step3');
+
+    function checkPhoneNumber(){
+        var phoneEl = $('#phone');
+        var phonenumber = phoneEl.val();
+        if (!phonenumber) {
+            alert('请输入手机号！');
+            return false;
+        }
+        var phonereg = /^1\d{10}$/;
+        var result = phonereg.test(phonenumber);
+        if (!result) {
+            alert('请输入正确的手机号');
+        }
+        return result;
+    }
+    function disableVerifyBtn(){
+        var t = 60;
+        var btntxt = '获取验证码';
+        var btnMsg = $('#btnGetMessage')
+        btnMsg.addClass('disable');
+        var interval = setInterval(function(){            
+            btnMsg.val(btntxt + "("+(--t)+")")
+            if(t==0){
+                btnMsg.val(btntxt);
+                btnMsg.removeClass('disable')
+                clearInterval(interval);                
+            }
+        }, 1000)
+    }
+
+
+    function initOnepass(captchaObj){
+        var opInstance = new GTOP({
+            custom: 'fd2cf5e6589a7ceccbc1cc57f6b299a4',
+            checkGatewayUrl:'http://www.geetest.com/demo/gt/check_gateway', // 您的check_gateway地址
+            checkMessageUrl:'http://www.geetest.com/demo/gt/check_message'  // 您的check_message地址
+        });
+        var result = captchaObj.getValidate();
+        opInstance.onGatewaySuccess(function(){
+            // 网关验证成功，finish
+            console.log('onGatewaySuccess')
+            $("#loading").hide();
+            step1Div.hide();
+            step2Div.hide();
+            step3Div.show();
+        }).onGatewayFail(function(err){
+            console.log('onGatewayFail', err);
+            // step2: 网关失败，调用短信
+            opInstance.sendMessage({phone: $('#phone').val(), process_id: result.geetest_validate})
+        }).onSendMessageSuccess(function(){
+            // step3: 短信发送成功， 显示短信接收页面
+            console.log('onSendMessageSuccess')
+            $("#loading").hide();
+            step1Div.hide();
+            step2Div.show();
+            step3Div.hide();
+            disableVerifyBtn();
+            // 重新获取验证码
+            $("#btnGetMessage").click(function(e){
+                var target = $(e.currentTarget);
+                if(target.hasClass('disable')){
+                    return;
+                }
+                var checkphone = checkPhoneNumber();
+                if (checkphone) {
+                    reSendMessage = true;
+                    opInstance.reset();
+                    captchaObj.verify();                        
+                }          
+            });
+            $("#btnStep2").click(function(){
+                $("#loading").show();
+                // step4 短信验证接口
+                opInstance.checkMessage($('#txtmsg').val());
+            });
+        }).onSendMessageFail(function(){
+            $("#loading").hide();
+            alert('sendMessage fail')
+        }).onCheckMessageSuccess(function(){
+            // step5 短信验证成功 finish
+            console.log('onMessageSuccess')
+            $("#loading").hide();
+            step1Div.hide();
+            step2Div.hide();
+            step3Div.show();
+        }).onCheckMessageFail(function(){
+            $("#loading").hide();
+            alert('checkmessage fail');
+        }).onError(function(err){
+            $("#loading").hide();
+            console.log(err);                
+        });        
+        return opInstance
+    }
+    var opInstance = null;
+    var reSendMessage = false;
+    var handler = function (captchaObj) {
+        captchaObj.onReady(function () {
+            console.info('geetest is ready')
+            $('#btnStep1').click(function (e) {
+                var checkphone = checkPhoneNumber();
+                if (checkphone) {
+                    captchaObj.verify();
+                }
+            });
+        }).onSuccess(function () {
+            var result = captchaObj.getValidate();
+            if (!result) {return alert('请完成验证');}
+            
+            $("#loading").show();
+            // 重新获取短信， 就不用重新走网关了
+            if(reSendMessage && opInstance){
+                // 重新获取短信
+                opInstance.sendMessage({phone: $('#phone').val(), process_id: result.geetest_validate})
+                return;
+            }
+            opInstance = initOnepass(captchaObj);
+            // step1: 调用网关
+            opInstance.gateway({phone: $('#phone').val(), process_id: result.geetest_validate});            
+        });    
+    };
+
+    $.ajax({
+        url: "http://www.geetest.com/demo/gt/register-fullpage?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+
+            // 调用 initGeetest 进行初始化
+            // 参数1：配置参数
+            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
+            initGeetest({
+                // 以下 4 个配置参数为必须，不能缺少
+                gt: data.gt,
+                challenge: data.challenge,
+                offline: !data.success, // 表示用户后台检测极验服务器是否宕机
+                new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
+
+                product: "bind", // 产品形式，包括：float，popup
+                width: "300px"
+                // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+            }, handler);
+        }
+    }); 
+</script>
+</body>
+</html>

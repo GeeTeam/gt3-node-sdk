@@ -5,8 +5,17 @@ var Geetest = require('../gt-sdk');
 
 var app = express();
 app.use(bodyParser.json());
+app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('./demo/static'));
+
+app.all('*', function(req, res, next){
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+        res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+        next();
+});
+
 
 var fullpage = require('./fullpage');
 app.get("/gt/register-fullpage", function (req, res) {
@@ -197,6 +206,69 @@ app.post("/gt/validate-slide", function (req, res) {
     });
 });
 
+var slide_en = require('./slide_en');
+app.get("/gt/register-slide-en", function (req, res) {
+
+    // 向极验申请每次验证所需的challenge
+    slide_en.register(function (err, data) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        if (!data.success) {
+            // 进入 failback，如果一直进入此模式，请检查服务器到极验服务器是否可访问
+            // 可以通过修改 hosts 把极验服务器 api.geetest.com 指到不可访问的地址
+
+            // 为以防万一，你可以选择以下两种方式之一：
+
+            // 1. 继续使用极验提供的failback备用方案
+            res.send(data);
+
+            // 2. 使用自己提供的备用方案
+            // todo
+
+        } else {
+            // 正常模式
+            res.send(data);
+        }
+    });
+});
+app.post("/gt/validate-slide-en", function (req, res) {
+
+    // 对ajax提供的验证凭证进行二次验证
+    slide_en.validate({
+        geetest_challenge: req.body.geetest_challenge,
+        geetest_validate: req.body.geetest_validate,
+        geetest_seccode: req.body.geetest_seccode
+
+    }, function (err, success) {
+
+        if (err) {
+
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (!success) {
+
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
+        } else {
+
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });
+        }
+    });
+});
+
 var test = require('./test');
 app.get("/gt/register-test", function (req, res) {
 
@@ -323,6 +395,205 @@ app.post("/gt/validate-userdemo", function (req, res) {
     });
 });
 
+var op = require('./onepass')
+app.post("/gt/check_gateway", function (req, res) {
+    op.check_gateway(req.body, function(err, result){        
+        res.send(result);
+    })
+});
+app.post("/gt/check_message", function (req, res) {    
+    op.check_message(req.body, function(err, result){        
+        res.send(result);
+    })
+});
+
+var click_s = require('./click_s');
+app.get("/gt/register-click-s-e", function (req, res) {
+
+    // 向极验申请每次验证所需的challenge
+    click_s.e.register(function (err, data) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        if (!data.success) {
+            // 进入 failback，如果一直进入此模式，请检查服务器到极验服务器是否可访问
+            // 可以通过修改 hosts 把极验服务器 api.geetest.com 指到不可访问的地址
+
+            // 为以防万一，你可以选择以下两种方式之一：
+
+            // 1. 继续使用极验提供的failback备用方案
+            res.send(data);
+
+            // 2. 使用自己提供的备用方案
+            // todo
+
+        } else {
+            // 正常模式
+            res.send(data);
+        }
+    });
+});
+app.post("/gt/validate-click-s-e", function (req, res) {
+
+    // 对ajax提供的验证凭证进行二次验证
+    click_s.e.validate({
+        geetest_challenge: req.body.geetest_challenge,
+        geetest_validate: req.body.geetest_validate,
+        geetest_seccode: req.body.geetest_seccode
+
+    }, function (err, success) {
+
+        if (err) {
+
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (!success) {
+
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
+        } else {
+
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });
+        }
+    });
+});
+app.get("/gt/register-click-s-h", function (req, res) {
+
+    // 向极验申请每次验证所需的challenge
+    click_s.h.register(function (err, data) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        if (!data.success) {
+            // 进入 failback，如果一直进入此模式，请检查服务器到极验服务器是否可访问
+            // 可以通过修改 hosts 把极验服务器 api.geetest.com 指到不可访问的地址
+
+            // 为以防万一，你可以选择以下两种方式之一：
+
+            // 1. 继续使用极验提供的failback备用方案
+            res.send(data);
+
+            // 2. 使用自己提供的备用方案
+            // todo
+
+        } else {
+            // 正常模式
+            res.send(data);
+        }
+    });
+});
+app.post("/gt/validate-click-s-h", function (req, res) {
+
+    // 对ajax提供的验证凭证进行二次验证
+    click_s.h.validate({
+        geetest_challenge: req.body.geetest_challenge,
+        geetest_validate: req.body.geetest_validate,
+        geetest_seccode: req.body.geetest_seccode
+
+    }, function (err, success) {
+
+        if (err) {
+
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (!success) {
+
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
+        } else {
+
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });
+        }
+    });
+});
+
+
+var phrase = require('./phrase');
+app.get("/gt/register-phrase", function (req, res) {
+
+    // 向极验申请每次验证所需的challenge
+    phrase.register(function (err, data) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        if (!data.success) {
+            // 进入 failback，如果一直进入此模式，请检查服务器到极验服务器是否可访问
+            // 可以通过修改 hosts 把极验服务器 api.geetest.com 指到不可访问的地址
+
+            // 为以防万一，你可以选择以下两种方式之一：
+
+            // 1. 继续使用极验提供的failback备用方案
+            res.send(data);
+
+            // 2. 使用自己提供的备用方案
+            // todo
+
+        } else {
+            // 正常模式
+            res.send(data);
+        }
+    });
+});
+app.post("/gt/validate-phrase", function (req, res) {
+
+    // 对ajax提供的验证凭证进行二次验证
+    phrase.validate({
+        geetest_challenge: req.body.geetest_challenge,
+        geetest_validate: req.body.geetest_validate,
+        geetest_seccode: req.body.geetest_seccode
+
+    }, function (err, success) {
+
+        if (err) {
+
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (!success) {
+
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
+        } else {
+
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });
+        }
+    });
+});
 
 
 var port = 9977;

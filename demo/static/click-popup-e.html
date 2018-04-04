@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sliding mode</title>
+    <title>大图模式</title>
     <style>
         body {
             margin: 50px 0;
@@ -46,7 +46,7 @@
         label {
             vertical-align: top;
             display: inline-block;
-            width: 180px;
+            width: 80px;
             text-align: right;
         }
 
@@ -55,30 +55,31 @@
             color: #666;
             margin: 0;
         }
+
     </style>
 </head>
 <body>
-<h2><a href="./">BACK</a></h2>
-<h1>Sliding mode</h1>
+<h2><a href="./">返回</a></h2>
+<h1>大图模式</h1>
 <form id="form">
     <div>
-        <label for="username">username：</label>
-        <input class="inp" id="username" type="text" value="username">
+        <label for="username">用户名：</label>
+        <input class="inp" id="username" type="text" value="用户名">
     </div>
     <br>
     <div>
-        <label for="password">password：</label>
+        <label for="password">密码：</label>
         <input class="inp" id="password" type="password" value="123456">
     </div>
     <br>
     <div>
-        <label>Complete verification：</label>
+        <label>完成验证：</label>
         <div id="captcha">
-            <p id="wait" class="show">Load......</p>
+            <p id="wait" class="show">正在加载验证码......</p>
         </div>
     </div>
     <br>
-    <div id="btn" class="btn">Submit</div>
+    <div id="btn" class="btn">提交</div>
 </form>
 
 <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
@@ -94,10 +95,10 @@
         $('#btn').click(function () {
             var result = captchaObj.getValidate();
             if (!result) {
-                return alert('Please complete verification');
+                return alert('请完成验证');
             }
             $.ajax({
-                url: 'gt/validate-slide-en',
+                url: 'gt/validate-click-s-e',
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -109,20 +110,19 @@
                 },
                 success: function (data) {
                     if (data.status === 'success') {
-                        alert('success');
+                        alert('登录成功');
                     } else if (data.status === 'fail') {
-                        alert('fail, Please complete verification');
+                        alert('登录失败，请完成验证');
                         captchaObj.reset();
                     }
                 }
             });
         })
-        // 更多接口说明请参见：http://docs.geetest.com/install/client/web-front/
+        // 更多前端接口说明请参见：http://docs.geetest.com/install/client/web-front/
     };
 
-
     $.ajax({
-        url: "gt/register-slide-en?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        url: "gt/register-click-s-e?t=" + (new Date()).getTime(), // 加随机数防止缓存
         type: "get",
         dataType: "json",
         success: function (data) {
@@ -138,9 +138,8 @@
                 new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
 
                 product: "popup", // 产品形式，包括：float，popup
-                lang: 'en',
                 width: "300px"
-                // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
+                // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         }
     });
