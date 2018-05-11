@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style>
+        body {
+            margin: 50px 0;
+            text-align: center;
+            font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+        }
+
+        .inp {
+            border: 1px solid #cccccc;
+            border-radius: 2px;
+            padding: 0 10px;
+            width: 278px;
+            height: 40px;
+            font-size: 18px;
+        }
+
+        .btn {
+            display: inline-block;
+            box-sizing: border-box;
+            border: 1px solid #cccccc;
+            border-radius: 2px;
+            width: 100px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+            background: white linear-gradient(180deg, #ffffff 0%, #f3f3f3 100%);
+        }
+
+        .btn:hover {
+            background: white linear-gradient(0deg, #ffffff 0%, #f3f3f3 100%)
+        }
+
+        #captcha {
+            width: 300px;
+            display: inline-block;
+        }
+
+        label {
+            vertical-align: top;
+            display: inline-block;
+            width: 80px;
+            text-align: right;
+        }
+
+        #wait {
+            text-align: left;
+            color: #666;
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+<h2><a href="./">返回</a></h2>
+<h1></h1>
+<form id="form">
+    <div>
+        <label for="phone">手机号：</label>
+        <input class="inp" id="phone" type="text" value="手机号">
+    </div>
+    <br>
+    <div>
+        <label for="password">密码：</label>
+        <input class="inp" id="password" type="password" value="123456">
+    </div>
+    <br>
+    <div id="btn" class="btn">提交</div>
+</form>
+
+<!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
+<script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+<script src="libs/main.js"></script>
+</body>
+</html>
