@@ -44,7 +44,7 @@ initSense({
 
 function submit(data){
     $.ajax({
-        url: '/gt/verify',
+        url: 'gt/verify',
         type: "post",
         dataType: "json",
         data: {
