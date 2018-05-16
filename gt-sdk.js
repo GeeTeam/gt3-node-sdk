@@ -46,7 +46,7 @@ Geetest.prototype = {
     NEW_CAPTCHA: true,
     JSON_FORMAT: 1,
 
-    register: function (callback) {
+    register: function (callback, data) {
 
         var that = this;
         return new Promise(function (resolve, reject) {
@@ -59,22 +59,29 @@ Geetest.prototype = {
                 } else {
                     resolve(data);
                 }
-            });
+            },data);
         });
     },
 
-    _register: function (callback) {
+    _register: function (callback, data) {
         var that = this;
+        var query = {
+            gt: this.geetest_id,
+            json_format: this.JSON_FORMAT,
+            sdk: 'Node_' + pkg.version
+        }
+
+        if(data){
+            query.risk_type = data.risk_type
+        }
+
+
         request({
             url: this.PROTOCOL + this.API_SERVER + this.REGISTER_PATH,
             method: 'GET',
             timeout: this.TIMEOUT,
             json: true,
-            qs: {
-                gt: this.geetest_id,
-                json_format: this.JSON_FORMAT,
-                sdk: 'Node_' + pkg.version
-            }
+            qs: query
         }, function (err, res, data) {
 
             if (err || !data || !data.challenge) {
