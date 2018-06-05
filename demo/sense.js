@@ -21,11 +21,11 @@ function verify(query, callback) {
         timeout: TIMEOUT,
         json: true,
         form: {
-            id: query.id,
+            id: ID,
             seccode: md5(private_key+query.challenge),
             challenge: query.challenge,
             idType: query.idType,
-            idValue: query.username,
+            idValue: query.idValue,
             user_ip: getIp(),
             timestamp: new Date().getTime()
         }
