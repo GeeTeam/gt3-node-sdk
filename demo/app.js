@@ -851,10 +851,9 @@ app.post("/gt/verify", function (req, res) {
     var sense = require('./sense')
     // 对ajax提供的验证凭证进行二次验证
     sense.verify({
-        id: req.body.id,
         challenge: req.body.challenge,
-        idType: req.body.idType,
-        idValue: req.body.username
+        idType: 1,
+        idValue: req.body.phone
     }, function (err, success) {        
         if (err) {
 
@@ -864,18 +863,18 @@ app.post("/gt/verify", function (req, res) {
                 info: err
             });
 
-        } else if (!success) {
-
-            // 二次验证失败
-            res.send({
-                status: "fail",
-                info: '登录失败'
-            });
-        } else {
+        } else if (success && success.status === 'success') {
             console.log(success)
             res.send({
                 status: "success",
                 info: '登录成功'
+            });            
+        } else {
+            console.log(success)
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
             });
         }
     });
