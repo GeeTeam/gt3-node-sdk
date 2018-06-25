@@ -73,6 +73,11 @@ Geetest.prototype = {
 
         if(data){
             query.risk_type = data.risk_type
+            if(data.na === true){
+                this.API_SERVER = 'api-na.geetest.com'
+            } else {
+                this.API_SERVER = 'api.geetest.com'
+            }
         }
 
 
