@@ -20,7 +20,11 @@ initSense({
         }
         sense.sense()
     });
-    sense.onSuccess(function (data) {
+    sense.setInfos(function () {
+        return {
+            interactive: 1  //用户场景
+        }
+    }).onSuccess(function (data) {
        submit(data)
     }).onClose(function(){
         console.log('close')
