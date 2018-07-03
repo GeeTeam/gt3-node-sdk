@@ -20,14 +20,7 @@ initSense({
         }
         sense.sense()
     });
-    sense.setInfos(function () {
-        //设置可上传数据。请务必按照字段规范填写，否则会在服务验证时出错，导致程序无法运行或者后续数据分析出现混乱。
-        return {
-            idType: 1,
-            idValue: document.getElementById("phone").value,
-            interactive: 1
-        }
-    }).onSuccess(function (data) {
+    sense.onSuccess(function (data) {
        submit(data)
     }).onClose(function(){
         console.log('close')
