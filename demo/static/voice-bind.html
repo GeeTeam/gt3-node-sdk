@@ -82,6 +82,8 @@
 <script src="libs/gt.js"></script>
 <script src="libs/utility.js"></script>
 <script>
+var lang = location.href.match(/\?lang=(\w+)/); 
+lang = lang ? lang[1] : 'zh-cn';
     var handler = function (captchaObj) {
         captchaObj.appendTo('#captcha');
         captchaObj.onReady(function () {
@@ -136,7 +138,8 @@
                 new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
                 lang: GetRequest('lang') || 'zh-cn',
                 product: "bind", // 产品形式，包括：float，popup
-                width: "300px"
+                width: "300px", 
+                lang: lang,
                 // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         }
