@@ -84,8 +84,8 @@ body { margin: 0; text-align: center; font-size:14px;font-family:"PingFangSC-Reg
 <!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
 <script src="libs/gt.js"></script>
 <script>
-var lang = location.href.match(/\?lang=(\w+)/); 
-lang = lang ? lang[1] : 'zh-cn';
+ 
+
     function showError($el, msg) { $('.ui-tip', $el.parent().addClass('error')).text(msg);}
     function hideError($el) {
         if ($el) { $el.parent().removeClass('error') }
@@ -157,7 +157,7 @@ lang = lang ? lang[1] : 'zh-cn';
 
                 product: "bind", // 产品形式，包括：float，popup
                 width: "300px", 
-                lang: lang,
+                
                 // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         }
