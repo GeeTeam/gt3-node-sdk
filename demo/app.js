@@ -18,6 +18,70 @@ app.all('*', function(req, res, next){
 
 var voice = require('./voice');
 
+var hw_voice = require('./hw-voice');
+// 华为app接口，支持risk_type: 0 (AI) 1(滑动) 2（大图）3（语音）
+app.get("/gt/register-hw-voice", function (req, res) {
+	// 向极验申请每次验证所需的challenge
+	var risk_type = req.query.risk_type ? req.query.risk_type : 0;
+	hw_voice.register(function (err, data) {
+		if (err) {
+			console.error(err);
+			return;
+		}
+
+		if (!data.success) {
+			// 进入 failback，如果一直进入此模式，请检查服务器到极验服务器是否可访问
+			// 可以通过修改 hosts 把极验服务器 api.geetest.com 指到不可访问的地址
+
+			// 为以防万一，你可以选择以下两种方式之一：
+
+			// 1. 继续使用极验提供的failback备用方案
+			res.send(data);
+
+			// 2. 使用自己提供的备用方案
+			// todo
+
+		} else {
+			// 正常模式
+			res.send(data);
+		}
+	},{risk_type:risk_type});
+});
+app.post("/gt/validate-hw-voice", function (req, res) {
+
+	// 对ajax提供的验证凭证进行二次验证
+	hw_voice.validate({
+		geetest_challenge: req.body.geetest_challenge,
+		geetest_validate: req.body.geetest_validate,
+		geetest_seccode: req.body.geetest_seccode
+
+	}, function (err, success) {
+
+		if (err) {
+
+			// 网络错误
+			res.send({
+				status: "error",
+				info: err
+			});
+
+		} else if (!success) {
+
+			// 二次验证失败
+			res.send({
+				status: "fail",
+				info: '登录失败'
+			});
+		} else {
+
+			res.send({
+				status: "success",
+				info: '登录成功'
+			});
+		}
+	});
+});
+
 // click-转语音
 app.get("/gt/register-click-voice", function (req, res) {
 
@@ -711,12 +775,12 @@ app.post("/gt/validate-userdemo", function (req, res) {
 
 var op = require('./onepass')
 app.post("/gt/check_gateway", function (req, res) {
-    op.check_gateway(req.body, function(err, result){        
+    op.check_gateway(req.body, function(err, result){
         res.send(result);
     })
 });
-app.post("/gt/check_message", function (req, res) {    
-    op.check_message(req.body, function(err, result){        
+app.post("/gt/check_message", function (req, res) {
+    op.check_message(req.body, function(err, result){
         res.send(result);
     })
 });
@@ -979,7 +1043,7 @@ app.post("/gt/verify", function (req, res) {
         challenge: req.body.challenge,
         idType: 1,
         idValue: req.body.phone
-    }, function (err, success) {        
+    }, function (err, success) {
         if (err) {
 
             // 网络错误
@@ -993,7 +1057,7 @@ app.post("/gt/verify", function (req, res) {
             res.send({
                 status: "success",
                 info: '登录成功'
-            });            
+            });
         } else {
             console.log(success)
             // 二次验证失败
