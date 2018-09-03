@@ -21,8 +21,8 @@ function verify(query, callback) {
         timeout: TIMEOUT,
         json: true,
         form: {
-            id: ID,
-            seccode: md5(private_key+query.challenge),
+            id: query.gtid || ID,
+            seccode: md5((query.gtkey || private_key)+query.challenge),
             challenge: query.challenge,
             idType: query.idType,
             idValue: query.idValue,

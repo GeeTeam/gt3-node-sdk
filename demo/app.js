@@ -1004,7 +1004,108 @@ app.post("/gt/verify", function (req, res) {
         }
     });
 });
+app.post("/gt/verify-web", function (req, res) {
+    var sense = require('./sense')
+    // 对ajax提供的验证凭证进行二次验证
+    sense.verify({
+        challenge: req.body.challenge,
+        idType: 1,
+        idValue: req.body.phone,
+        gtid:'95da05c7809ec08cf97cfb2e932cd381',
+        gtkey:'e639f5d2ad7ed993ec0f148c200181c5'
+    }, function (err, success) {        
+        if (err) {
 
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (success && success.status === 'success') {
+            console.log(success)
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });            
+        } else {
+            console.log(success)
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
+        }
+    });
+});
+app.post("/gt/verify-ios", function (req, res) {
+    var sense = require('./sense')
+    // 对ajax提供的验证凭证进行二次验证
+    sense.verify({
+        challenge: req.body.challenge,
+        idType: 1,
+        idValue: req.body.phone,
+        gtid: 'ccccf9a5f96540df27e34fb274d7ea00',
+        gtkey: '01a679bb560db909d41feb0e154b9c7e'
+    }, function (err, success) {        
+        if (err) {
+
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (success && success.status === 'success') {
+            console.log(success)
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });            
+        } else {
+            console.log(success)
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
+        }
+    });
+});
+app.post("/gt/verify-android", function (req, res) {
+    var sense = require('./sense')
+    // 对ajax提供的验证凭证进行二次验证
+    sense.verify({
+        challenge: req.body.challenge,
+        idType: 1,
+        idValue: req.body.phone,
+        gtid: '06d65cab4b025384f7d8f575ab309035',
+        gtkey: '0e2501393f725e9d94d5dbbc1533dfdd'        
+    }, function (err, success) {        
+        if (err) {
+
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (success && success.status === 'success') {
+            console.log(success)
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });            
+        } else {
+            console.log(success)
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
+        }
+    });
+});
 var port = 9977;
 app.listen(port, function () {
     console.log('listening at http://localhost:' + port)
