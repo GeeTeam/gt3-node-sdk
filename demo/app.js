@@ -1170,6 +1170,40 @@ app.post("/gt/verify-android", function (req, res) {
         }
     });
 });
+app.post("/gt/verify-autosense", function (req, res) {
+    var sense = require('./sense')
+    // 对ajax提供的验证凭证进行二次验证
+    sense.verify({
+        challenge: req.body.challenge,
+        idType: 4,
+        idValue: new Date().getTime().toString('32'), //业务相关
+        gtid:'a87d498cbd86bce7c211ef183a3ec958',
+        gtkey:'6a76957cc1fb21a711aef6b9409c372c'
+    }, function (err, success) {        
+        if (err) {
+
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (success && success.status === 'success') {
+            console.log(success)
+            res.send({
+                status: "success",
+                info: '成功'
+            });            
+        } else {
+            console.log(success)
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '失败'
+            });
+        }
+    });
+});
 var port = 9977;
 app.listen(port, function () {
     console.log('listening at http://localhost:' + port)
