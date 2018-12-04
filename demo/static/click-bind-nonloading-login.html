@@ -154,24 +154,24 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
                     <form class="login-form">
                         <div class="input-row email-row">
                             <i class="input-icon"></i>
-                            <input type="text" name="email" placeholder="用户名" autocomplete="off"/>                            
+                            <input type="text" name="email" placeholder="用户名" autocomplete="off"/>
                         </div>
                         <div class="input-row password-row">
                             <i class="input-icon"></i>
-                            <input type="password" name="pwd" placeholder="密码" autocomplete="off"/>                            
+                            <input type="password" name="pwd" placeholder="密码" autocomplete="off"/>
                         </div>
                         <div class="tool-row">
                             <span class="ui-chkbox">记住密码</span>
                             <a href="#" class="forget-pwd">忘记密码?</a>
                         </div>
-                        <div class="login-btn-row">                            
-                            <div id="btn" class="btn-login">                                
+                        <div class="login-btn-row">
+                            <div id="btn" class="btn-login">
                                 <span class="loading">
                                     <svg class="js_loading spinner" width="24px" height="24px">
                                        <circle class="path" fill="none" stroke="white" stroke-width="2"  stroke-linecap="round"  cx="12" cy="12" r="10"></circle>
                                     </svg>
                                 </span>
-                                <span class="success">                                    
+                                <span class="success">
                                     <div class="geetest_success_show">
                                         <div class="geetest_success_pie"></div>
                                         <div class="geetest_success_filter"></div>
@@ -180,7 +180,7 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
                                     <div class="geetest_success_correct">
                                         <div class="geetest_success_icon"></div>
                                     </div>
-                                </span>                                
+                                </span>
                                 <span class="js_txt">登录</span>
                             </div>
                             <div id="btnError" class="btn-login error" style="display: none;">
@@ -212,11 +212,11 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
 
 <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
 <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
-<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数。为防劫持，强烈建议将此文件放在客户服务器！！！-->
 <script src="libs/gt.js"></script>
 <script>
-     
-    
+
+
     var handler = function (captchaObj) {
         captchaObj.onReady(function () {
             $("#wait").hide();
@@ -251,7 +251,7 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
                     }
                 }
             });
-        }).onNextReady(function(){            
+        }).onNextReady(function(){
             hideLoading();
         }).onError(function(err){
             validateFail();
@@ -264,9 +264,9 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
 
         $('#btnError').click(function(){
             $('#btn').show();
-            $('#btnError').hide();    
+            $('#btnError').hide();
             showLoading();
-           captchaObj.verify(); 
+           captchaObj.verify();
         })
         // 更多前端接口说明请参见：http://docs.geetest.com/install/client/web-front/
     };
@@ -289,7 +289,8 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
                 timeout: 5000,
                 product: "bind", // 产品形式，包括：float，popup
                 width: "300px",
-                pure: 1 // 1 表示纯净版无loading, 0 表示有loading
+                pure: 1, // 1 表示纯净版无loading, 0 表示有loading
+                https: true
                 // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         }

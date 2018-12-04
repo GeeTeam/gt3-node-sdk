@@ -84,11 +84,11 @@
 
 <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
 <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
-<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数。为防劫持，强烈建议将此文件放在客户服务器！！！-->
 <script src="libs/gt.js"></script>
 <script src="libs/utility.js"></script>
 <script>
- 
+
 
     var handler = function (captchaObj) {
         captchaObj.appendTo('#captcha');
@@ -141,8 +141,9 @@
                 new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
                 lang: GetRequest('lang') || 'zh-cn',
                 product: "popup", // 产品形式，包括：float，popup
-                width: "300px" 
-                
+                width: "300px",
+                https: true
+
                 // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         }

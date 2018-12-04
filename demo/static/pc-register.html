@@ -49,7 +49,7 @@ li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 
     <section class="nav-bar">
         <div class="nav-inner">
             <a href="login.html" class="stage">登陆场景</a>
-            <a href="javascript:void(0);" class="stage active">发送短信场景</a>            
+            <a href="javascript:void(0);" class="stage active">发送短信场景</a>
             <a href="comment.html" class="stage">发表评论场景</a>
             <a href="vote.html" class="stage">投票场景</a>
         </div>
@@ -82,10 +82,10 @@ li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 
 
 <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
 <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
-<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数。为防劫持，强烈建议将此文件放在客户服务器！！！-->
 <script src="libs/gt.js"></script>
 <script>
- 
+
 
     var handler = function (captchaObj) {
         captchaObj.onReady(function () {
@@ -114,7 +114,7 @@ li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 
                     geetest_seccode: result.geetest_seccode
                 },
                 success: function (data) {
-                    if (data.status === 'success') {                        
+                    if (data.status === 'success') {
                         _alert('成功获取验证码');
                     } else if (data.status === 'fail') {
                         _alert('失败，请完成验证');
@@ -128,7 +128,7 @@ li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 
             var checkphone = checkPhoneNumber();
             if (checkphone) {
                 captchaObj.verify();
-            }       
+            }
         })
         // 更多前端接口说明请参见：http://docs.geetest.com/install/client/web-front/
     };
@@ -150,8 +150,9 @@ li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 
                 new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
 
                 product: "bind", // 产品形式，包括：float，popup
-                width: "300px" 
-                
+                width: "300px",
+                https: true
+
                 // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         }
@@ -174,7 +175,7 @@ li.item.noborder { border: 0px; background: #fff; padding: 0; margin: 0; width: 
             showError(phoneEl,'请输入正确的手机号');
         }
         return result;
-    }    
+    }
 
     $('.agreeprotocol').on('click', function(e){
         var target = $(e.currentTarget);

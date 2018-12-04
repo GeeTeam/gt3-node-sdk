@@ -19,17 +19,16 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
 
 <div id="captcha">
     <p id="wait" class="show">正在加载验证码......</p>
-</div>    
-
-<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+</div>
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数。为防劫持，强烈建议将此文件放在客户服务器！！！-->
 <script src="libs/gt.js"></script>
 <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
 <script>
-     
-    
+
+
     (function(){
         var ajax = function(obj){
-            var xhr = new XMLHttpRequest();            
+            var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){
                 if(xhr.readyState === 4){
                     if(xhr.status === 200){
@@ -42,7 +41,7 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
             var data = obj.data || null;
             xhr.open(obj.type||'get', obj.url);
             if(obj.type && obj.type.toLowerCase() === 'post'){
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');    
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 if(obj.data){
                     var t_data = []
                     for(var p in obj.data){
@@ -57,7 +56,7 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
             captchaObj.appendTo('#captcha');
             captchaObj.onReady(function () {
                 document.getElementById('wait').style.display='none'
-            }).onSuccess(function(){                
+            }).onSuccess(function(){
                 var result = captchaObj.getValidate();
                 if (!result) {
                     return alert('请完成验证');
@@ -71,10 +70,10 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
                         geetest_seccode: result.geetest_seccode
                     },
                     success: function (data) {
-                        if (data && data.status === 'success') {                            
+                        if (data && data.status === 'success') {
                             if(wx && wx.miniProgram){
                                 data.__type__ = 'webview_back';
-                                wx.miniProgram.postMessage({data: data});                                
+                                wx.miniProgram.postMessage({data: data});
                                 wx.miniProgram.navigateBack()
                             } else {
                                 alert('没有引入微信小程序JSSDK，请查看微信小程序文档');
@@ -97,8 +96,9 @@ label { vertical-align: top; display: inline-block; width: 80px; text-align: rig
                     offline: !data.success,
                     new_captcha: true,
                     product: "popup",
-                    width: "300px" 
-                    
+                    width: "300px",
+                    https: true
+
                 }, handler);
             }
         })

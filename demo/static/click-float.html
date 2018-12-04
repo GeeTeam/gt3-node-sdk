@@ -51,10 +51,10 @@
         }
 
         #text {
-            height: 42px;	
-            width: 298px;	
+            height: 42px;
+            width: 298px;
             text-align: center;
-            border-radius: 2px;	
+            border-radius: 2px;
             background-color: #F3F3F3;
             color: #BBBBBB;
             font-size: 14px;
@@ -64,10 +64,10 @@
 
         #wait {
             display: none;
-            height: 42px;	
-            width: 298px;	
+            height: 42px;
+            width: 298px;
             text-align: center;
-            border-radius: 2px;	
+            border-radius: 2px;
             background-color: #F3F3F3;
         }
 
@@ -83,19 +83,19 @@
             height: 8px;
             margin: 18px 4px;
             background: #ccc;
-        
+
             -webkit-border-radius: 50%;
             -moz-border-radius: 50%;
             border-radius: 50%;
-        
+
             opacity: 0;
-        
+
             -webkit-box-shadow: 0 0 2px black;
             -moz-box-shadow: 0 0 2px black;
             -ms-box-shadow: 0 0 2px black;
             -o-box-shadow: 0 0 2px black;
             box-shadow: 0 0 2px black;
-        
+
             -webkit-animation: loadingFade 1s infinite;
             -moz-animation: loadingFade 1s infinite;
             animation: loadingFade 1s infinite;
@@ -181,11 +181,11 @@
 
 <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
 <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
-<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数。为防劫持，强烈建议将此文件放在客户服务器！！！-->
 <script src="libs/gt.js"></script>
 <script>
-     
-    
+
+
     var handler = function (captchaObj) {
         captchaObj.appendTo('#captcha');
         captchaObj.onReady(function () {
@@ -238,8 +238,9 @@
                 new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
 
                 product: "float", // 产品形式，包括：float，popup
-                width: "300px"
-                
+                width: "300px",
+                https: true
+
                 // 更多前端配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
             }, handler);
         }

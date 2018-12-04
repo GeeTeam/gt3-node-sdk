@@ -40,7 +40,7 @@ img{border:none}
 
 .voted .vote-state{background-image: url(image/勾选.png)}
 .btn-vote-wraper{position:relative;display:block;margin:50px auto 46px;width:154px;}
-.btn-vote{display:block;height:44px;line-height:44px;background:#ff5050;color:#fff;border-radius:24px;cursor:pointer} 
+.btn-vote{display:block;height:44px;line-height:44px;background:#ff5050;color:#fff;border-radius:24px;cursor:pointer}
 
     </style>
 </head>
@@ -95,10 +95,10 @@ img{border:none}
 </div>
 
 <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
-<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数 -->
+<!-- 引入 gt.js，既可以使用其中提供的 initGeetest 初始化函数。为防劫持，强烈建议将此文件放在客户服务器！！！-->
 <script src="libs/gt.js"></script>
 <script>
- 
+
 
     $(function ($) {
         /*  点击选中投票项目   */
@@ -183,8 +183,9 @@ img{border:none}
                     new_captcha: data.new_captcha, // 用于宕机时表示是新验证码的宕机
 
                     product: "bind", // 产品形式，包括：float，popup
-                    width: "300px" 
-                    
+                    width: "300px",
+                    https: true
+
                     // 更多配置参数说明请参见：http://docs.geetest.com/install/client/web-front/
                 }, handler);
             }
