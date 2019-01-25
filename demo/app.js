@@ -1584,6 +1584,74 @@ app.post("/gt/verify-autosense", function (req, res) {
         }
     });
 });
+app.post("/gt/official-autosense", function (req, res) {
+    var sense = require('./sense')
+    // 对ajax提供的验证凭证进行二次验证
+    sense.verify({
+        challenge: req.body.challenge,
+        idType: 4,
+        idValue: new Date().getTime().toString('32'), //业务相关
+        gtid:'13f1eeeeae9485df8b593bbe8eb12bfc',
+        gtkey:'377f89479357367c685335d0dcca4b92'
+    }, function (err, success) {        
+        if (err) {
+
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (success && success.status === 'success') {
+            console.log(success)
+            res.send({
+                status: "success",
+                info: '成功'
+            });            
+        } else {
+            console.log(success)
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '失败'
+            });
+        }
+    });
+});
+app.post("/gt/verify-sense", function (req, res) {
+    var sense = require('./sense')
+    // 对ajax提供的验证凭证进行二次验证
+    sense.verify({
+        challenge: req.body.challenge,
+        idType: 1,
+        idValue: req.body.phone,
+        gtid:'',
+        gtkey:'4e62e1b2994969a47b629840f71553d1'
+    }, function (err, success) {        
+        if (err) {
+
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (success && success.status === 'success') {
+            console.log(success)
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });            
+        } else {
+            console.log(success)
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
+        }
+    });
+});
 var port = 9977;
 app.listen(port, function () {
     console.log('listening at http://localhost:' + port)
