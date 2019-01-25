@@ -1624,7 +1624,7 @@ app.post("/gt/verify-sense", function (req, res) {
     sense.verify({
         challenge: req.body.challenge,
         idType: 1,
-        idValue: req.body.phone,
+        idValue: req.body.idValue || new Date().getTime().toString('32'),
         gtid:'',
         gtkey:'4e62e1b2994969a47b629840f71553d1'
     }, function (err, success) {        
