@@ -13,15 +13,15 @@ initSense({
        submit(data)
     })
     function clickHandle(){
-        sense.sense()
+        sense.sense('auto_click')
         document.removeEventListener('click', clickHandle);
     }
     function touchHandle(){
-        sense.sense()
+        sense.sense('auto_click')
         document.removeEventListener('touchend', touchHandle);
     }
     // 8s后触发
-    setTimeout(function(){sense.sense()}, 8000)
+    setTimeout(function(){sense.sense('auto_wait')}, 8000)
     // click触发
     if(document.addEventListener){
         document.addEventListener('click', clickHandle)
