@@ -48,16 +48,24 @@ var captcha = new Geetest({
 
 `data` 给用户传入客户端的类型和ip地址（如果无法知道ip地址则填写`'unknown'`）。如果不想传 `data`，则传入 `null`。
 
-类型有以下几种：
+`data`结构
 
-`'web'`: pc浏览器
-`'h5'`: 手机浏览器，包括webview
-`'native'`: 原生APP
-`'unknown'`: 未知
+- `user_id`：用户标识，若担心用户信息风险，可作预处理(如哈希处理)再提供
+- `client_type`：`'web'`: pc浏览器 `'h5'`: 手机浏览器，包括webview `'native'`: 原生APP `'unknown'`: 未知
+- `ip_address`：客户端请求您服务器的ip地址，`'unknown'`表示未知
+
 
 ## `validate(fallback, result, callback)`
 
-`fallback` 表示当前session是否宕机。
+`fallback` 表示当前session是否宕机。`Boolean`
+
+`result` 验证onSuccess返回的结果.
+
+`result` 结构
+- `geetest_challenge`：验证返回的结果
+- `geetest_validate`：验证返回的结果
+- `geetest_seccode`：验证返回的结果
+
 
 # 注意事项
 
