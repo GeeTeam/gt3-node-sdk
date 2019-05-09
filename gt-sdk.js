@@ -71,7 +71,7 @@ Geetest.prototype = {
         }, function (err, res, data) {
             var challenge;
             if (err || !data || !data.challenge) {
-                // fallback
+                // failback
                 challenge = that._make_challenge();
                 callback(null, {
                     success: 0,
@@ -90,10 +90,10 @@ Geetest.prototype = {
             }
         });
     },
-    validate: function (fallback, result, callback) {
+    validate: function (failback, result, callback) {
         var that = this;
         return new Promise(function (resolve, reject) {
-            that._validate(fallback, result, function (err, data) {
+            that._validate(failback, result, function (err, data) {
                 if (typeof callback === 'function') {
                     callback(err, data);
                 }
@@ -105,11 +105,11 @@ Geetest.prototype = {
             });
         })
     },
-    _validate: function (fallback, result, callback) {
+    _validate: function (failback, result, callback) {
         var challenge = result.challenge || result.geetest_challenge;
         var validate = result.validate || result.geetest_validate;
         var seccode = result.seccode || result.geetest_seccode;
-        if (fallback) {
+        if (failback) {
             if (md5(challenge) === validate) {
                 callback(null, true);
             } else {

@@ -32,7 +32,7 @@ app.get("/gt/register-fullpage", function (req, res) {
             // 为以防万一，你可以选择以下两种方式之一：
 
             // 1. 继续使用极验提供的failback备用方案
-            req.session.fallback = true;
+            req.session.failback = true;
             res.send(data);
 
             // 2. 使用自己提供的备用方案
@@ -40,14 +40,14 @@ app.get("/gt/register-fullpage", function (req, res) {
 
         } else {
             // 正常模式
-            req.session.fallback = false;
+            req.session.failback = false;
             res.send(data);
         }
     });
 });
 app.post("/gt/validate-fullpage", function (req, res) {
     // 对ajax提供的验证凭证进行二次验证
-    fullpage.validate(req.session.fallback, {
+    fullpage.validate(req.session.failback, {
         geetest_challenge: req.body.geetest_challenge,
         geetest_validate: req.body.geetest_validate,
         geetest_seccode: req.body.geetest_seccode
@@ -96,7 +96,7 @@ app.get("/gt/register-click", function (req, res) {
             // 为以防万一，你可以选择以下两种方式之一：
 
             // 1. 继续使用极验提供的failback备用方案
-            req.session.fallback = true;
+            req.session.failback = true;
             res.send(data);
 
             // 2. 使用自己提供的备用方案
@@ -104,14 +104,14 @@ app.get("/gt/register-click", function (req, res) {
 
         } else {
             // 正常模式
-            req.session.fallback = false;
+            req.session.failback = false;
             res.send(data);
         }
     });
 });
 app.post("/gt/validate-click", function (req, res) {
     // 对ajax提供的验证凭证进行二次验证
-    click.validate(req.session.fallback, {
+    click.validate(req.session.failback, {
         geetest_challenge: req.body.geetest_challenge,
         geetest_validate: req.body.geetest_validate,
         geetest_seccode: req.body.geetest_seccode
@@ -160,7 +160,7 @@ app.get("/gt/register-slide", function (req, res) {
             // 为以防万一，你可以选择以下两种方式之一：
 
             // 1. 继续使用极验提供的failback备用方案
-            req.session.fallback = true;
+            req.session.failback = true;
             res.send(data);
 
             // 2. 使用自己提供的备用方案
@@ -168,7 +168,7 @@ app.get("/gt/register-slide", function (req, res) {
 
         } else {
             // 正常模式
-            req.session.fallback = false;
+            req.session.failback = false;
             res.send(data);
         }
     });
@@ -176,7 +176,7 @@ app.get("/gt/register-slide", function (req, res) {
 app.post("/gt/validate-slide", function (req, res) {
 
     // 对ajax提供的验证凭证进行二次验证
-    slide.validate(req.session.fallback, {
+    slide.validate(req.session.failback, {
         geetest_challenge: req.body.geetest_challenge,
         geetest_validate: req.body.geetest_validate,
         geetest_seccode: req.body.geetest_seccode

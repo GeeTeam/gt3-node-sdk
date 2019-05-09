@@ -55,9 +55,9 @@ var captcha = new Geetest({
 - `ip_address`：客户端请求您服务器的ip地址，`'unknown'`表示未知
 
 
-## `validate(fallback, result, callback)`
+## `validate(failback, result, callback)`
 
-`fallback` 表示当前session是否宕机。`Boolean`
+`failback` 表示当前session是否宕机。`Boolean`
 
 `result` 验证onSuccess返回的结果.
 
