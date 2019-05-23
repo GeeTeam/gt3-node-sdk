@@ -1,4 +1,4 @@
-极验验证
+极验行为验证
 ========
 极验行为验证是一款可以帮助你的网站与 APP 应用识别与拦截机器程序批量自动化操作的SaaS应用。它是由极验开发的
 新一代人机验证产品，它不基于传统“问题-答案”的检测模式，而是通过利用深度学习对验证过程中产生的行为数据进行
@@ -61,18 +61,18 @@ npm start
 
 # 使用说明
 
-sdk 提供 `Geetest` 构造函数，实例化时需要传入一个配置对象。为了更好的理解，请参照demo理解以下内容。
+sdk 提供 Geetest 构造函数，实例化时需要传入一个配置对象。为了更好的理解，请参照demo理解以下内容。
 
 配置对象的字段如下：
 
-- `geetest_id`：验证公钥，**必须**
-- `geetest_key`：验证私钥，**必须**
-- `protocol`：与极验服务器交互时使用的协议，默认为 `http://`，**可选**
-- `api_server`：针对私有化用户提供对默认的 `api.geetest.com` 进行修改，普通用户无需关注此选项，**可选**
+- geetest_id：验证公钥，**必须**
+- geetest_key：验证私钥，**必须**
+- protocol：与极验服务器交互时使用的协议，默认为 http://，**可选**
+- api_server：针对私有化用户提供对默认的 api.geetest.com 进行修改，普通用户无需关注此选项，**可选**
 
-`geetest_id` 和 `geetest_key` 申请地址：[account.geetest.com](http://account.geetest.com/)
+geetest_id 和 geetest_key 申请地址：[account.geetest.com](http://account.geetest.com/)
 
-申请后，初始化 `Geetest`：
+申请后，初始化 Geetest：
 
 ```js
 var Geetest = require('gt3-sdk');
@@ -83,29 +83,29 @@ var captcha = new Geetest({
 });
 ```
 
-上述 `Geetest` 的实例 `captcha` 提供两个方法：
+上述 Geetest 的实例 captcha 提供两个方法：
 
-## `register(data, callback)`
+##  register(data, callback)
 
-`data` 给用户传入客户端的类型和ip地址（如果无法知道ip地址则填写`'unknown'`）。如果不想传 `data`，则传入 `null`。
+data 给用户传入客户端的类型和ip地址（如果无法知道ip地址则填写'unknown'）。如果不想传 data，则传入 null。
 
-`data`结构
+data结构
 
-- `user_id`：用户标识，若担心用户信息风险，可作预处理(如哈希处理)再提供
-- `client_type`：`'web'`: pc浏览器 `'h5'`: 手机浏览器，包括webview `'native'`: 原生APP `'unknown'`: 未知
-- `ip_address`：客户端请求您服务器的ip地址，`'unknown'`表示未知
+- user_id：用户标识，若担心用户信息风险，可作预处理(如哈希处理)再提供
+- client_type：'web': pc浏览器 'h5': 手机浏览器，包括webview 'native': 原生APP 'unknown': 未知
+- ip_address：客户端请求您服务器的ip地址，'unknown'表示未知
 
 
-## `validate(failback, result, callback)`
+## validate(failback, result, callback)
 
-`failback` 表示当前session是否宕机。`Boolean`
+failback 表示当前session是否宕机。Boolean
 
-`result` 验证onSuccess返回的结果.
+result 验证onSuccess返回的结果.
 
-`result` 结构
-- `geetest_challenge`：验证返回的结果
-- `geetest_validate`：验证返回的结果
-- `geetest_seccode`：验证返回的结果
+result 结构
+- geetest_challenge：验证返回的结果
+- geetest_validate：验证返回的结果
+- geetest_seccode：验证返回的结果
 
 
 # 注意事项
