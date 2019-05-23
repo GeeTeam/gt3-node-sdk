@@ -32,11 +32,11 @@
 
 联系我们
 --------
-官网： www.geetest.com
-技术支持邮箱：service@geetest.com
-技术支持电话：400-8521-816
-联系商务邮箱：cooperation@geetest.com
-联系商务电话：13720157161
+官网： www.geetest.com    
+技术支持邮箱：service@geetest.com    
+技术支持电话：400-8521-816    
+联系商务邮箱：cooperation@geetest.com    
+联系商务电话：13720157161    
 
 
 **此处为极验 3.0 验证码的 Node SDK，如需要极验 2.0 验证码的SDK，请到 [gt-node-sdk](https://github.com/GeeTeam/gt-node-sdk)**
