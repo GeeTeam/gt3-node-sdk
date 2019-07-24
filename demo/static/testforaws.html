@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container {
+            font-size: 30px;
+            margin: 0 auto;
+            width: 600px;
+            text-align: center;
+        }
+
+        #domain {
+            width: 400px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    请输入测试域名
+    <div>
+        <lable for="domain"></lable>
+        <input type="text" id="domain" value="">
+    </div>
+    <div>
+        <button id="btn">点击创建</button>
+    </div>
+</div>
+
+
+<script>
+
+  var btn = document.querySelector('#btn');
+  var domain = document.querySelector('#domain');
+  btn.addEventListener('click', function () {
+    sendRequest();
+  })
+
+  domain.addEventListener('keydown', function (e) {
+    if(e.key === 'Enter'){
+      sendRequest();
+    }
+  })
+
+  function sendRequest() {
+    var ele = document.createElement('script');
+    ele.src = domain.value;
+    ele.crossOrigin = "anonymous";
+    document.head.append(ele);
+    ele.onload = function () {
+      alert("success");
+    }
+    ele.onerror = function (e) {
+      console.log(e);
+      alert("fail:");
+    }
+  }
+
+</script>
+</body>
+</html>
