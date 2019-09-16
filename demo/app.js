@@ -1652,6 +1652,37 @@ app.post("/gt/verify-sense", function (req, res) {
         }
     });
 });
+app.post("/gt/verify-dk-v2", function (req, res) {
+    var sense = require('./dk-v2')
+    // 对ajax提供的验证凭证进行二次验证
+    sense.verify({
+        session_id: req.body.session_id,
+    }, function (err, data) {  
+        data = typeof data === 'string' ? JSON.parse(data) : data;
+        if (err) {
+
+            // 网络错误
+            res.send({
+                status: "error",
+                info: err
+            });
+
+        } else if (data && data.status === 1) {
+            console.log(data)
+            res.send({
+                status: "success",
+                info: '登录成功'
+            });
+        } else {
+            console.log(data)
+            // 二次验证失败
+            res.send({
+                status: "fail",
+                info: '登录失败'
+            });
+        }
+    });
+});
 var port = 9977;
 app.listen(port, function () {
     console.log('listening at http://localhost:' + port)
