@@ -92,7 +92,7 @@
              * 确保拿到 session_id 后再请求接口
              * 以免报错
              */
-            $.post('/gt/verify-dk-v2', {
+            $.post('gt/verify-dk-v2', {
                 session_id: session_id
             }, function(res) {
                 console.log(res);
