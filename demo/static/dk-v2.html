@@ -80,28 +80,35 @@
 <!-- 引入 v2.sense.js，强烈建议将此文件放在客户服务器！！！-->
 <script src="libs/v2.sense.js?id=449727cc395032a34f71d9b7b13cb02e"></script>
 
+<!-- <script>
+    (function () {
+        var _s = document.createElement("script");
+        _s.src = "libs/v2.sense.js?id=449727cc395032a34f71d9b7b13cb02e";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(_s, s);
+    })();
+</script> -->
+
 <script>
     $('#btn').click(function () {
-        // 调用之前先通过前端表单校验
-
-        var session_id = Sense.getSid();
-        if(session_id) {
-            console.log(session_id)
-            /**
-             * 调用 verify 接口将 session_id 传给 server
-             * 确保拿到 session_id 后再请求接口
-             * 以免报错
-             */
-            $.post('gt/verify-dk-v2', {
-                session_id: session_id
-            }, function(res) {
-                console.log(res);
-            });
-        }else {
-            /**
-             * 除了没拿到 session_id 或为空的情况
-             */
-        }
+        // 通过回调获取session_id
+        Sense.getSid(function(sid) {
+            sid && $.ajax({
+                url: '/gt/verify-dk-v2',
+                type: "post",
+                dataType: "json",
+                data: {
+                    session_id: sid, // 查询结果的凭证
+                    phone: '123', // 手机号
+                    password: '123' // 密码
+                },
+                success: function (result) {
+                    console.log(result);
+                }
+            })
+        }, function(err) {
+            console.log(err);
+        });
     });
 </script>
 </body>
