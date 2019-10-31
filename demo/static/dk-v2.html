@@ -1,115 +1,173 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title></title>
     <style>
-        body {
-            margin: 50px 0;
-            text-align: center;
-            font-family: "PingFangSC-Regular", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
-        }
+      body {
+        margin: 50px 0;
+        text-align: center;
+        font-family: "PingFangSC-Regular", "Open Sans", Arial,
+          "Hiragino Sans GB", "Microsoft YaHei", "STHeiti",
+          "WenQuanYi Micro Hei", SimSun, sans-serif;
+      }
 
-        .inp {
-            border: 1px solid #cccccc;
-            border-radius: 2px;
-            padding: 0 10px;
-            width: 278px;
-            height: 40px;
-            font-size: 18px;
-        }
+      .inp {
+        border: 1px solid #cccccc;
+        border-radius: 2px;
+        padding: 0 10px;
+        width: 278px;
+        height: 40px;
+        font-size: 18px;
+      }
 
-        .btn {
-            display: inline-block;
-            box-sizing: border-box;
-            border: 1px solid #cccccc;
-            border-radius: 2px;
-            width: 100px;
-            height: 40px;
-            line-height: 40px;
-            font-size: 16px;
-            color: #666;
-            cursor: pointer;
-            background: white linear-gradient(180deg, #ffffff 0%, #f3f3f3 100%);
-        }
+      .btn {
+        display: inline-block;
+        box-sizing: border-box;
+        border: 1px solid #cccccc;
+        border-radius: 2px;
+        width: 100px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 16px;
+        color: #666;
+        cursor: pointer;
+        background: white linear-gradient(180deg, #ffffff 0%, #f3f3f3 100%);
+      }
 
-        .btn:hover {
-            background: white linear-gradient(0deg, #ffffff 0%, #f3f3f3 100%)
-        }
+      .btn:hover {
+        background: white linear-gradient(0deg, #ffffff 0%, #f3f3f3 100%);
+      }
 
-        #captcha {
-            width: 300px;
-            display: inline-block;
-        }
+      #captcha {
+        width: 300px;
+        display: inline-block;
+      }
 
-        label {
-            vertical-align: top;
-            display: inline-block;
-            width: 80px;
-            text-align: right;
-        }
+      label {
+        vertical-align: top;
+        display: inline-block;
+        width: 80px;
+        text-align: right;
+      }
 
-        #wait {
-            text-align: left;
-            color: #666;
-            margin: 0;
-        }
-
+      #wait {
+        text-align: left;
+        color: #666;
+        margin: 0;
+      }
     </style>
-</head>
-<body>
-<h2><a href="./">返回</a></h2>
-<h1></h1>
-<form id="form">
-    <div>
+  </head>
+  <body>
+    <h2><a href="./">返回</a></h2>
+    <h1></h1>
+    <form id="form">
+      <div>
         <label for="phone">手机号：</label>
-        <input class="inp" id="phone" type="text" value="手机号">
-    </div>
-    <br>
-    <div>
+        <input class="inp" id="phone" type="text" value="手机号" />
+      </div>
+      <br />
+      <div>
         <label for="password">密码：</label>
-        <input class="inp" id="password" type="password" value="123456">
-    </div>
-    <br>
-    <div id="btn" class="btn">提交</div>
-</form>
+        <input class="inp" id="password" type="password" value="123456" />
+      </div>
+      <br />
+      <div id="btn" class="btn">提交</div>
+    </form>
 
-<!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
-<script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
-<!-- 引入 v2.sense.js，强烈建议将此文件放在客户服务器！！！-->
-<script src="libs/v2.sense.js?id=449727cc395032a34f71d9b7b13cb02e"></script>
+    <!-- 注意，验证码本身是不需要 jquery 库，此处使用 jquery 仅为了在 demo 中使用，减少代码量 -->
+    <script src="//apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script>
+    <!-- 引入 v2.sense.js，强烈建议将此文件放在客户服务器！！！-->
+    <script src="libs/v2.sense.js?id=449727cc395032a34f71d9b7b13cb02e"></script>
 
-<!-- <script>
-    (function () {
+    <!-- <script>
+      (function() {
         var _s = document.createElement("script");
-        _s.src = "libs/v2.sense.js?id=449727cc395032a34f71d9b7b13cb02e";
+        _s.src = "v2.sense.js?id=449727cc395032a34f71d9b7b13cb02e";
         var s = document.getElementsByTagName("script")[0];
         s.parentNode.insertBefore(_s, s);
-    })();
-</script> -->
-
-<script>
-    $('#btn').click(function () {
+      })();
+    </script> -->
+    <script>
+      $("#btn").click(function() {
         // 通过回调获取session_id
-        Sense.getSid(function(sid) {
-            sid && $.ajax({
-                url: '/gt/verify-dk-v2',
+        SensePro.getSid(
+          function(sid) {
+            sid &&
+              $.ajax({
+                url: "gt/verify-dk-v2",
                 type: "post",
                 dataType: "json",
                 data: {
-                    session_id: sid, // 查询结果的凭证
-                    phone: '123', // 手机号
-                    password: '123' // 密码
+                  session_id: sid, // 查询结果的凭证
+                  phone: "123", // 手机号
+                  password: "123" // 密码
                 },
-                success: function (result) {
-                    console.log(result);
+                success: function(result) {
+                  console.log(result);
                 }
-            })
-        }, function(err) {
+              });
+          },
+          function(err) {
             console.log(err);
+          }
+        );
+      });
+    </script>
+
+    <script>
+      // 动态加载
+      function loadScript(src, callback) {
+        var script = document.createElement("script"),
+          head = document.getElementsByTagName("head")[0];
+        script.type = "text/javascript";
+        script.charset = "UTF-8";
+        script.src = src;
+        if (script.addEventListener) {
+          script.addEventListener(
+            "load",
+            function() {
+              callback();
+            },
+            false
+          );
+        } else if (script.attachEvent) {
+          script.attachEvent("onreadystatechange", function() {
+            var target = window.event.srcElement;
+            if (target.readyState == "loaded") {
+              callback();
+            }
+          });
+        }
+        head.appendChild(script);
+      }
+
+      loadScript("libs/v2.sense.js?sense_id=449727cc395032a34f71d9b7b13cb02e", function() {
+        SensePro.onReady(function() {
+          SensePro.getSid(
+            function(sid) {
+              sid &&
+                $.ajax({
+                  url: "gt/verify-dk-v2",
+                  type: "post",
+                  dataType: "json",
+                  data: {
+                    session_id: sid, // 查询结果的凭证
+                    phone: "123", // 手机号
+                    password: "123" // 密码
+                  },
+                  success: function(result) {
+                    console.log(result);
+                  }
+                });
+            },
+            function(err) {
+              console.log(err);
+            }
+          );
         });
-    });
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>
