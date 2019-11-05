@@ -56,18 +56,24 @@ Geetest.prototype = {
     _register: function (data, callback) {
         data = data || {};
         var that = this;
+        var qs = {
+            gt: this.geetest_id,
+            json_format: this.JSON_FORMAT,
+            sdk: 'Node_' + pkg.version,
+            client_type: data.client_type || 'unknown',
+            ip_address: data.ip_address || 'unknown'
+        }
+        
+        if (data.user_id) {
+            qs.user_id = data.user_id
+        }
+        
         request({
             url: this.PROTOCOL + this.API_SERVER + this.REGISTER_PATH,
             method: 'GET',
             timeout: this.TIMEOUT,
             json: true,
-            qs: {
-                gt: this.geetest_id,
-                json_format: this.JSON_FORMAT,
-                sdk: 'Node_' + pkg.version,
-                client_type: data.client_type || 'unknown',
-                ip_address: data.ip_address || 'unknown'
-            }
+            qs: qs
         }, function (err, res, data) {
             var challenge;
             if (err || !data || !data.challenge) {
