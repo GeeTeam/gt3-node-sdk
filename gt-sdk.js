@@ -118,16 +118,30 @@ Geetest.prototype = {
         } else {
             var hash = this.geetest_key + 'geetest' + challenge;
             if (validate === md5(hash)) {
+                const data = {
+                    gt: this.geetest_id,
+                    seccode: seccode,
+                    json_format: this.JSON_FORMAT
+                }
+                
+                if (result.user_id) {
+                    data.user_id = result.user_id
+                }
+                
+                if (result.client_type) {
+                    data.client_type = result.client_type
+                }
+                
+                if (result.ip_address) {
+                    data.ip_address = result.ip_address
+                }
+                
                 request({
                     url: this.PROTOCOL + this.API_SERVER + this.VALIDATE_PATH,
                     method: 'POST',
                     timeout: this.TIMEOUT,
                     json: true,
-                    form: {
-                        gt: this.geetest_id,
-                        seccode: seccode,
-                        json_format: this.JSON_FORMAT
-                    }
+                    form: data
                 }, function (err, res, data) {
                     if (err || !data || !data.seccode) {
                         callback(err);
