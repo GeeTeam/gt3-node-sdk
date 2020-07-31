@@ -29,8 +29,8 @@ captcha.fullpage = new Geetest({
 
 // 英文slide
 captcha.enSlide = new Geetest({
-  geetest_id: '71730f3344b6e5f38717007368a833bb',
-  geetest_key: '8b820b88c9768da4c4c3120fff5b5f7b'
+  geetest_id: '305883028523f32c10909c712b625fcc',
+  geetest_key: '816c0dc6bac010d8cc16ae120f410c5f'
 });
 
 // 英文icon
@@ -41,8 +41,8 @@ captcha.enIcon = new Geetest({
 
 // 英文fullpage
 captcha.enFullpage = new Geetest({
-  geetest_id: '7b8ee24aa22172edf436fbaf851ff96c',
-  geetest_key: '638bb5b66bebd65d5dc0cb8d4a340817'
+  geetest_id: '022397c99c9f646f6477822485f30404',
+  geetest_key: 'd394e1cee7ed8ca4e173b9756b4de843'
 });
 
 module.exports = captcha;
