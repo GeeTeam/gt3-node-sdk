@@ -1,3 +1,9 @@
+/*
+ * @Author: ziming
+ * @Date: 2020-11-20 18:28:52
+ * @LastEditors: ziming
+ * @LastEditTime: 2021-01-25 14:53:21
+ */
 "use strict";
 
 var request = require('request'),
@@ -5,7 +11,7 @@ var request = require('request'),
 
 function verify(query, callback) {
 
-    const dkTestUrl = 'https://dkapi.geetest.com';
+    const dkTestUrl = 'https://baixinbank.geetest.com';
     const secret = '4e62e1b2994969a47b629840f71553d1'; //撒盐：加密的时候混淆
             
     //jwt生成token
